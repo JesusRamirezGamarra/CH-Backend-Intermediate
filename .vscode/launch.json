@@ -1,0 +1,27 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            // "program": "${file}/src/app.js",
+            "program": "${workspaceFolder}/src/app.js",
+            "env":{
+                // mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
+                // "MONGO_URL":"mongodb+srv://coderhouse:Mishina2000@coderhouse-cluster-ljrg.qaohzev.mongodb.net/CoderHouse-eCommerce?retryWrites=true&w=majority",
+                "MONGODB_USER":"coderhouse",
+                "MONGODB_PASSWORD":"Mishina2000",
+                "MONGODB_CLUSTER":"coderhouse-cluster-ljrg.qaohzev.mongodb.net",
+                "MONGODB_DATABASE":"CoderHouse-eCommerce",
+                "MONGODB_OPTONS":"retryWrites=true&w=majority"
+            }
+        }
+    ]
+}
