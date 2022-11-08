@@ -10,16 +10,35 @@ const usersSchema = new mongoose.Schema({
     username: {
         type: String, 
         required: true, 
-        unique: true
+        trim:true,
+        lowercase :true,
+        index: {
+            unique: true
+        }
+        // // unique: true
     },
     password:{ 
         type: String, 
-        required: true
+        required: [true,'password must have more than 2 characters']
+    },
+    role:{
+        type:String,
+        enum: ['user','admin'],
+        default:'user'
     }
-    // name:String,
-    // email:String,
-    // password:String
 })
 
-const userService =  mongoose.model(collection,usersSchema);
+// var options = {
+//     errorMessages: {
+//         UserExistsError: 'Email already exists',
+//         IncorrectUsernameError: 'Email does not exist'
+
+//     }
+// };
+
+
+// const userService =  mongoose.model(  collection,usersSchema,options=options);
+const userService =  mongoose.model(  collection,usersSchema);
+
+
 export default userService;

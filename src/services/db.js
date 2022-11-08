@@ -25,23 +25,23 @@ export const initDB_Event =  () => {
     // CONNECTION EVENTS
     // When successfully connected
     mongoose.connection.on('connected',()=>{
-        console.log(`Mongoose is connected ! worker process with ${process.pid} started`)
+        console.log(`🥋  ~  Mongoose is connected ! worker process with ${process.pid} started`)
     })
 
     // If the connection throws an error
     mongoose.connection.on('error', (err)=> { 
-        console.log('Mongoose default connection error: ' + err);
+        console.log(`🥋  ~  Mongoose default connection error: ` + err);
     }); 
 
     // When the connection is disconnected
     mongoose.connection.on('disconnected',  () =>{ 
-        console.log('Mongoose default connection disconnected'); 
+        console.log(`🥋  ~  Mongoose default connection disconnected`); 
     });
 
     // If the Node process ends, close the Mongoose connection 
     process.on('SIGINT', ()=> {   
     mongoose.connection.close( ()=> { 
-        console.log('Mongoose default connection disconnected through app termination'); 
+        console.log(`🥋  ~  Mongoose default connection disconnected through app termination`); 
         process.exit(0); 
         }); 
     }); 
@@ -70,8 +70,8 @@ export const initDB_Promise = async () => {
         config.mongo.MONGO_URL,
         optionConnect
     )
-    .then((db)=> console.log(`Mongoose is connected ! worker process with ${process.pid} started`))       
-    .catch((err)=> console.error('Mongoose could not connect.',err) )        
+    .then((db)=> console.log(`🥋  ~  Mongoose is connected ! worker process with ${process.pid} started`))       
+    .catch((err)=> console.error(`🥋  ~  Mongoose could not connect.`,err) )        
 }
 
 
@@ -95,9 +95,9 @@ export const initDB_CallBack = () => {
             optionConnect,
             (err) =>{
                 if(err){
-                    console.log('Mongoose could not connect.',err)         
+                    console.log(`🥋  ~  Mongoose could not connect.`,err)         
                 }else{
-                    console.log(`Mongoose is connected ! worker process with ${process.pid} started` )
+                    console.log(`🥋  ~  Mongoose is connected ! worker process with ${process.pid} started` )
                 }
             }
         )        
@@ -121,11 +121,11 @@ export const initDB_TryCatch = () => {
             config.mongo.MONGO_URL,
             optionConnect,
             () =>{
-                console.log(`Mongoose is connected ! worker process with ${process.pid} started` )
+                console.log(`🥋  ~  Mongoose is connected ! worker process with ${process.pid} started` )
             }
         )        
     }
     catch(err){
-        console.log('Mongoose could not connect.',err)
+        console.log(`🥋  ~  Mongoose could not connect.`,err)
     }
 }
