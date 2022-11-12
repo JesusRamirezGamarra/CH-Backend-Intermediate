@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./src/app.js -e=PROD -m=FORK",
+    "DEV": "nodemon ./src/app.js -e=PROD -m=FORK",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,6 +25,7 @@
     "connect-flash": "^0.1.1",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.2",
     "express-handlebars": "^6.0.6",
@@ -33,9 +35,15 @@
     "minimist": "^1.2.7",
     "moment": "^2.29.4",
     "mongoose": "^6.3.5",
+    "nodemailer": "^6.8.0",
+    "nodemon": "^2.0.20",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
+    "pino": "^8.7.0",
+    "socket.io": "^4.5.3",
+    "uuid": "^9.0.0",
+    "vm": "^0.1.0",
     "winston": "^3.8.2"
   }
 }

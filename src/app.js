@@ -1,14 +1,15 @@
-import config from './config/config.js';
-import Server from './services/server.js';
-import { initDB_Event } from './services/db.js'
 import cluster from 'cluster'
 import os from 'os'
+import { createServer } from 'http'
+import { Server } from "socket.io";
+import config from './config/config.js';
+import app from './services/server.js';
+import { initDB_Event } from './services/db.js'
+
 
 
 const numCPUs = os.cpus().length;
-
-
-if(config.init.MODO === 'CLUSTER' && cluster.isPrimary){
+if(config.INIT.MODO === 'CLUSTER' && cluster.isPrimary){
     for (let i = 0; i < numCPUs; i++) {
         cluster.fork()
     }
@@ -20,45 +21,22 @@ if(config.init.MODO === 'CLUSTER' && cluster.isPrimary){
 else {
     const init = async () => {
         initDB_Event()
-        const server = Server.listen(config.init.PORT, () => {
-            console.log(`🎁  ~  Servidor escuchando en el puerto ${config.init.PORT} - worker process with ${process.pid} started , ready : http://localhost:${config.init.PORT}/`);
+        const server = createServer(app);
+        const io = new Server(server, { cors: { origin: "*" } });
+        global.io = io;
+        // app.use((req, res, next) => {
+        //     req.io = io;
+        //     return next();
+        // });
+        server.listen(config.INIT.PORT, () => {
+            console.log(`🎁  ~  Servidor escuchando en el puerto ${config.INIT.PORT} - worker process with ${process.pid} started , ready : http://localhost:${config.INIT.PORT}/`);
         });
         server.on('error', (error) => console.log(`Error en servidor: ${error}`));
+        
+
+
+
     }
     init()
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/***********************************************************************************************************
-
-
-const app = express();
-const PORT = process.env.PORT||8080;
-// const connection = mongoose.connect(`mongodb+srv://${config.mongo.USER}:${config.mongo.PASSWORD}@codercluster.w5adegs.mongodb.net/${config.mongo.DATABASE}?retryWrites=true&w=majority`)
-
-app.use(express.json());
-
-app.engine('handlebars',handlebars.engine());
-app.set('views',__dirname+'/views');
-app.set('view engine','handlebars');
-
-// app.use('/',viewsRouter);
-
-app.listen(PORT,()=>console.log(`Listening on ${PORT}`))
-
-
-**********************************************************************************************************/
+// export default io;

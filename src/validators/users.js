@@ -1,5 +1,5 @@
 import { check } from 'express-validator'
-import validateResult  from '../utils/validateHelper.js'
+import validateResult  from '../utils/validate-helper.js'
 
 const validateUserRegister = [
     check('name')
@@ -11,16 +11,17 @@ const validateUserRegister = [
         .isEmail(),
     check('password')
         .exists()
-        .isLength({min:3})
-        .withMessage('password must be 3 caracters')
+        .isLength({min:6})
+        .withMessage('password must be 6 caracters')
         .not()
-        .isEmpty(),        
-        // .custom((value,{req})=> {
-        //     if (value < 18 || value > 40) {
-        //         throw new Error ('Rango de edad debe ser entre 18 y 40')
-        //     }
-        //     return true
-        // }),   
+        .isEmpty(),       
+    check('repassword')
+        .custom((value,{req})=> {
+            if (value != req.body.password) {
+                throw new Error ('Password confirmation does not match password')
+            }
+            return true
+        }),   
         (req,res,next)=>{
             validateResult(req,res,next);
         }

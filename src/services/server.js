@@ -3,32 +3,31 @@ import express from "express";
 import handlebars from "express-handlebars";
 import session from "express-session";
 import passport from "passport";
-// import compression from "compression";
 import MongoStore from 'connect-mongo';
-import {___dirname} from '../utils/pathDirectory.js';
-
-import viewsRouter from '../routes/views.router.js'
-import sessionsRouter from '../routes/sessions.router.js'
-import randomRouter from '../routes/random.router.js'
+import moment from 'moment'
+import flash from 'connect-flash'
+// import { io } from "socket.io-client";
+//import { Server } from "socket.io";
+// import compression from "compression";
+import {___dirname} from '../utils/path-directory.js';
 import config from '../config/config.js'
 import initializePassport from '../config/passportLocal.config.js';
 import { logger } from '../utils/logger.js';
+// import pino from "pino"
+// import cors from 'cors'
+import viewsRouter from '../routes/views.router.js'
+import sessionRouter from '../routes/session.router.js'
+import randomRouter from '../routes/random.router.js'
+import profileRouter from '../routes/profile.route.js'
+import productRouter from "../routes/product.router.js"
+import cartRouter from "../routes/cart.router.js";
 
-import moment from 'moment'
-import flash from 'connect-flash'
-
-// import mongoose from 'mongoose';
-
-
-// import config from '../config/config.js'
-// import passport from 'passport';
-// import initializePassport from '../config/passport.config.js';
-// import cookieParser from 'cookie-parser';
-// import moment from 'moment'
+import services from '../daos/index.js'
 
 
-// console.log(___dirname)
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 const app = express();
 // app.use(compression());
 app.use(express.json());
@@ -45,29 +44,25 @@ app.use(express.static( ___dirname +  "\\public"));
 // resave = true            - It means when the modification is performed on the session it will re write the req.session.cookie object.
 // resave = false           - It will not rewrite the req.session.cookie object. the initial req.session.cookie remains as it is.
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
 const ttlSeconds = 60;
 app.use(session({
     store:MongoStore.create({
-        mongoUrl:config.mongo.MONGO_URL,
+        mongoUrl:config.SESSION.URL_CONNECT,
         ttl:3600
     }),
-    secret:'c0derSecretConpapasquesitoYunaMalteada',
+    secret:config.SESSION.SECRET,
     resave:false,
     saveUninitialized:false,
     cookie: {
-      maxAge: ttlSeconds * 1000,
-      expires: ttlSeconds * 1000,
+        maxAge: ttlSeconds * 1000 * 30,
+        expires: ttlSeconds * 1000 * 30,
       // httpsonly:true,
       // path:"/",
     },  
 }));
-
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// Handle Bars - Engine
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,9 +70,8 @@ app.use(passport.session());
 // For Windows : 'C:\\Results\\user1\\file_23_15_30.xlsx'
 // For Mac/Linux: /Users/user1/file_23_15_30.xlsx
 const layoutDirPath   = ___dirname + "\\views\\layouts";
-const defaultLayerPth = ___dirname + "\\views\\layouts/main.hbs";
+const defaultLayerPth = ___dirname + "\\views\\layouts\\main.hbs";
 const partialDirPath  = ___dirname + "\\views\\partials";
-
 app.engine('.hbs',handlebars.engine({
     extname : ".hbs",
     layoutsDir: layoutDirPath,
@@ -86,7 +80,6 @@ app.engine('.hbs',handlebars.engine({
 }));
 app.set('view engine','.hbs');
 app.set('views',___dirname+'\\views')
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Global variables
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,17 +91,46 @@ app.use(function(req, res, next) {
     res.locals.error = req.flash('error');
     next();
 });
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// Routers
 ////////////////////////////////////////////////////////////////////////////////////////////////
+app.use('/',randomRouter);
 app.use('/',viewsRouter);
-app.use('/api/sessions',sessionsRouter);
-app.use('/api/randoms', randomRouter);
-
+app.use('/',profileRouter);
+app.use('/api/session',sessionRouter);
+// app.use('/',loginRouter)
+// app.use('/api/sessions',sessionsRouter);
+app.use('/api/product',productRouter);
+app.use('/api/cart',cartRouter);
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // MANEJO DE RUTAS INEXISTENTES
 ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+app.get('/',async(req,res)=>{
+    if(!req.session.user) return res.redirect('/login')
+    let user = req.session.user
+    let listCart = await services.cartService.getCartProducts(req.session.user.cartID)
+    let total = await services.cartService.getTotal(user.cartID)
+    let endShop = `<form class="endshopForm"action="http://localhost:8080" method="post"><button id="endshop" class="endshop" formaction="/api/carts/endshop">Finalizar compra</button></form>`    
+    if(listCart.length ==0){
+        endShop = '<p>No tienes productos agregados</p>'
+        res.render("viewHome",{user,listCart,endShop,total})
+    }else{ 
+        res.render("viewHome",{user,listCart,endShop,total})}
+    io.on('connection',async(socket)=>{
+        let products = await services.productsService.getAll()
+        let datos = JSON.parse(products)
+        datos.push({cartID:user.cartID})
+        io.emit('lista',datos)    
+    })   
+
+    res.render("HomeAdmin",
+                {user:user}
+    );
+})  
+
+
 app.use( (req,res) => {
     try{
         let fyh = new moment().format('DD/MM/YYYY HH:mm:ss')
@@ -119,7 +141,7 @@ app.use( (req,res) => {
     catch(err){
         logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
     }
-
 })
+
 
 export default app;

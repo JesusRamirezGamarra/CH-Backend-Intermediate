@@ -1,54 +1,20 @@
 import  { Router } from 'express';
-import os from 'os';
-import compression from "compression";
-import { logger } from '../utils/logger.js';
 import moment from 'moment'
+import { logger } from '../utils/logger.js';
+import isAuthSession from '../middlewares/is.auth.js'
+// import io from '../app.js';
 
 const router = Router();
-
-// // Middleware
-const isLoggedIn = (req, res, next) => {
-    try{
-        if(!req.isAuthenticated())  res.redirect('/login') 
-        else    next();    
-    }
-    catch(err){
-        logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
-    }        
-}
-
-
-
-// router.get('/',(req,res)=>{
-//     res.render('login');
-// })
-
-
-
-////////////////////////////////////////////////////////////////////////////
-/* --------- REGISTER ---------- */
-router.get('/register', (req, res) => {
+router.get('/register', async(req, res) => {
     res.render('register');
 });
-
-router.get('/register-success', (req, res) => {
+router.get('/register-success', async(req, res) => {
     res.render('usuarioCreado');
 });
-
-/* ---------Error---------- */
-router.get('/demo',(req, res) => {
-    res.render("register", {
-        name: "Kushan", age: 24
-    });    
-})
-
-router.get('/register-error', (req, res) => {
-    // res.send({    status:"error",
-    //                 message:"User's Not Created",
-    //                 payload:{data:res.locals.error_message.map( err => {return {message : err,parameter : undefined,value : undefined}})}})
-
-
-
+router.get('/register-error', async(req, res) => {
+    res.send({  status:"error",
+                message:"User's Not Created",
+                payload:{data:res.locals.error_message.map( err => {return {message : err,parameter : undefined,value : undefined}})}})
     // res.render('register',
     //     { name: "Kushan", age: 24},
     //     (err,html)=>{
@@ -59,39 +25,53 @@ router.get('/register-error', (req, res) => {
     //         })
     //     }
     // )
-
-    res.render("register", {
-        name: "Kushan", age: 24
-    });
+    // res.render("register", {
+    //     name: "Kushan", age: 24
+    // });
 
 
     //res.render('register');
     //res.render('register-error')
 });
+router.get('/',async(req,res)=>{
+    if(!req.session.user) return res.redirect('/login')
+        let user = req.session.user
 
-////////////////////////////////////////////////////////////////////////////
-
-/* --------- LOGIN ---------- */
-router.get('/',(req,res)=>{
-    res.render('login');
+    res.render("HomeAdmin",
+                {user:user}
+    );
+//     let listCart = await services.cartsService.getCartProducts(req.session.user.cartID)
+//     let total = await services.cartsService.getTotal(user.cartID)
+//     let endShop = `<form class="endshopForm"action="http://localhost:8080" method="post">
+//     <button id="endshop" class="endshop" formaction="/api/carts/endshop">Finalizar compra</button>
+//     </form>
+// `
+//     if(listCart.length ==0){
+//         endShop = '<p>No tienes productos agregados</p>'
+//         res.render("viewHome",{user,listCart,endShop,total})
+//     }else{ 
+//         res.render("viewHome",{user,listCart,endShop,total})}
+//     io.on('connection',async(socket)=>{
+//         let products = await services.productsService.getAll()
+//         let datos = JSON.parse(products)
+//         datos.push({cartID:user.cartID})
+//         io.emit('lista',datos)
+    
+//     })    
 })
+router.get('/admin',async(req,res)=>{
+    if(!req.session.user) return res.redirect('/login')
+        let user = req.session.user
+
+    res.render("HomeAdmin",
+                {user:user}
+    );
+})    
+
+
 router.get('/login',(req,res)=>{
     res.render('login');
 })
-
-router.get('/login-success',(req,res)=>{
-    console.log('get: login-success');
-    res.render('login');
-})
-
-
-/* --------- Error---------- */
-router.get('/login-error', (req, res) => {
-    res.render('login-error')
-});
-
-////////////////////////////////////////////////////////////////////////////
-
 router.get('/data',(req,res)=>{
     try{
         if(!req.session.user) 
@@ -102,13 +82,7 @@ router.get('/data',(req,res)=>{
         logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
     }
 })
-
-
-
-////////////////////////////////////////////////////////////////////////////
-
-/* --------- DATOS ---------- */
-router.get('/datos', isLoggedIn, async(req, res,) => {
+router.get('/datos', isAuthSession, async(req, res,) => {
     try{
         const datos = req.user
         const nombre = datos.username
@@ -118,58 +92,17 @@ router.get('/datos', isLoggedIn, async(req, res,) => {
         logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
     }        
 })
-/* --------- LOGOUT ---------- */
 router.get('/logout', (req, res) => {
     try{
-        const datos = req.user
-        const nombre = datos.username
+        const datos = req.session.user;
+        const nombre = datos.username;
         req.session.destroy()
         res.render('logout',{nombre})
     }
     catch(err){
         logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
-    }
-    
+    }    
 });
-
-////////////////////////////////////////////////////////////////////////////
-
-const infodelProceso = {
-    // [-] Argumentos de entrada  
-    args: process.argv.slice(2),
-    // [-] Path de ejecución
-    execPath: process.cwd(),
-    // [-] Nombre de la plataforma (sistema operativo)      
-    plataforma: process.platform,
-    // [-] Process id
-    processID: process.pid,
-    // [-] Versión de node.js      
-    nodeVersion: process.version,
-    // [-] Carpeta del proyecto
-    carpeta: process.argv[1],
-    // [-] Memoria total reservada (rss)
-    memoria:  ` ${Math.round( JSON.stringify(process.memoryUsage.rss())/ 1024 / 1024 * 100) / 100} MB`,
-    // [-] Numero de nucleos
-    cantidadNucleos:  os.cpus().length,
-}
-
-/* --------- INFO ---------- */
-router.get('/info',compression(), async(req, res,) => {
-    try{
-        // logger.error(`PATH: ${req.path} || METHOD: ${req.method}`)
-        // logger.warn(`PATH: ${req.path} || METHOD: ${req.method}`)
-        logger.info(`PATH: ${req.path} || METHOD: ${req.method}`)
-        // logger.http(`PATH: ${req.path} || METHOD: ${req.method}`)
-        // logger.verbose(`PATH: ${req.path} || METHOD: ${req.method}`)
-        // logger.debug(`PATH: ${req.path} || METHOD: ${req.method}`)
-        // logger.silly(`PATH: ${req.path} || METHOD: ${req.method}`)
-        const data = infodelProceso
-        res.render('info', {data})
-    }
-    catch(err){
-        logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
-    }
-})
 
 
 export default router;

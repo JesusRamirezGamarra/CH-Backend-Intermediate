@@ -72,3 +72,118 @@ Curiosidad :
 
 El movimiento de #BlackLivesMatter ha ayudado a que GitHub sustituya algunas palabras usadas en su plataforma con relación al racismo.
 Palabras como master, whitelist, blacklist y slave se encuentran en este proceso de cambio. Pero el más importante en ese momento y que ya ha empezado a tener efecto es que la rama master ahora se llamará main.
+
+
+
+## NOTA : 
+
+* Malas Practicas : [ver mas](https://midu.dev/malas-practicas-javascript/)
+* JavaScript variable name validator : [ver mas](https://mothereff.in/js-variables)
+* Productividad en Visual Code : 
+- [ver mas](https://withoutdebugger.com/2020/07/12/tutorial-productividad-con-visual-studio-editor-de-codigo-parte-1/) 
+- [ver mas](https://damiandeluca.com.ar/visual-studio-code-atajos-de-teclado-shortcuts)
+* Convenciones para nombres de varialbes, funciones, clases, enum : [ver mas](https://www.youtube.com/watch?v=iYI3YvdsUWw)
+se adopta como convecion :
+
+a) las variables de solo lectura se esribiran en `UPPER SNAKE_CASE`
+```javascipt
+const MAX_LENGHT = 180;
+```
+b) las variables comunes tenemos : 
+
+- se esribiran en `camelCase` 
+para numeros/string/objetos/arrays : sustantivos con adjetivos [ver mas](https://www.ejemplos.co/sustantivos-con-sus-adjetivos/)
+sustantivo : Un sustantivo es una palabra que designa o da nombre a una entidad fija, es decir, un concepto, persona, objeto, lugar. Por ejemplo: auto, fuerza, Juan.
+adjetivos  : Un adjetivo es una palabra que modifica un sustantivo, expresando sus características o propiedades. Por ejemplo: amplio, verdadero, grande
+```javascript
+let firstName,lastName,averageHeight,maxPay;
+```
+
+- las clases en `PascalCase`
+```javascript
+class ProductController {};
+class CartService {};
+...
+const product =  new Product();'
+```
+
+- los enum en `UPPER_SNAKE_CASE`
+```javascript
+export const AccountType {
+	PERSONAL	= 	'Personal'
+	BUSINESS	=	'Business'
+	CREATOR		=	'Creator'
+}
+...
+Switch (accountType){
+	CASE AccountType.PERSONAL:
+		...
+}
+
+```
+- para las variables `booleanas` utilizar `is`o `has` ( en espanol :  `es`, `esta`, `tiene`, `ha`)
+```javascript
+// isValidPassword
+// hasAcceptedTheTerms
+
+const { isValidPassword } = usuario 
+if ( !isValidPassword ){
+  ...
+}
+```
+c) para funciones utilizaremos verbos en infinitivo o de accion y un sustantivo
+
+```javascript
+createProducto  = () =>{} o addProduct  = () =>{}
+readProducto    = () =>{} o getProducto = () =>{}
+updateProducto  = () =>{} o setProducto = () =>{} 
+deleteProducto  = () =>{} 
+
+```
+
+d) utizar `#` para definir variables privadas ( se utiliza `_ ` como prefijo de variables que no deberian ser Seteadas .) [ver mas](https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Classes/Private_class_fields)
+```javascript
+#privateField
+static #PRIVATE_STATIC_FIELD
+
+class ClassWithPrivateField {
+  #privateField
+}
+
+class ClassWithPrivateMethod {
+  #privateMethod() {
+    return 'hello world'
+  }
+}
+
+class ClassWithPrivateStaticField {
+  static #PRIVATE_STATIC_FIELD
+}
+
+```
+e) los `import` se denominaran en `kebab-case`
+```javascript
+import tokenGenerator from 'token-generator'
+```
+
+f) para los archivos se utilizara `kebab-case`
+```bash
+token-generator.js
+validate-helper.js
+chat-router.js
+```
+
+* response types [ver mas](https://es.javascript.info/fetch#:~:text=el%20siguiente%20cap%C3%ADtulo)%2C-,response.,datos%20binarios%20de%20bajo%20nivel)
+```javascript
+response.text() – lee y devuelve la respuesta en formato texto,
+response.json() – convierte la respuesta como un JSON,
+response.formData() – devuelve la respuesta como un objeto FormData (codificación multipart/form-data, explicado en el siguiente capítulo),
+response.blob() – devuelve la respuesta como Blob (datos binarios tipados),
+response.arrayBuffer() – devuelve la respuesta como un objeto ArrayBuffer (datos binarios de bajo nivel)
+```
+
+* Atajos de teclado para windows 10 [ver mas](https://www.xataka.com/basics/estos-son-los-mejores-gestos-y-atajos-de-teclado-para-windows-10)
+
+* Conceptos : 
+
+- JSON Payload : Payload is the essential information in a data block that you send to or receive from the server when making API requests. The Payload can be sent or received in a variety of formats, including JSON.31 oct 2021

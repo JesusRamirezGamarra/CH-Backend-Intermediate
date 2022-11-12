@@ -1,43 +1,35 @@
 import mongoose from 'mongoose'
 import config from '../config/config.js'
 
-// //----------* MONGOOSE CONNECTION *----------//
 
-
+const connectOptions = {
+    autoIndex:                  config.MONGO_DB.OPTIONS.AUTO_INDEX,                 //  false, // Don't build indexes
+    maxPoolSize:                config.MONGO_DB.OPTIONS.MAX_POOL_SIZE,              //  10, // Maintain up to 10 socket connections
+    serverSelectionTimeoutMS:   config.MONGO_DB.OPTIONS.SERVER_SELECTION_TIMEOUT,   // 5000, // Keep trying to send operations for 5 seconds
+    socketTimeoutMS:            config.MONGO_DB.OPTIONS.SOCKET_TIMEOUT_MS,          // Close sockets after 45 seconds of inactivity
+    family:                     config.MONGO_DB.OPTIONS.FAMILY,                      // Use IPv4, skip trying IPv6
+    keepAlive:                  config.MONGO_DB.OPTIONS.KEEP_ALIVE,                 // Keep
+    useUnifiedTopology:         config.MONGO_DB.OPTIONS.USE_UNIFIED_TOPOLOGY   
+    // userNewUrlParser:true,
+}
 export const initDB_Event =  () => {
-    
-    const optionConnect = {
-        autoIndex: false, // Don't build indexes
-        maxPoolSize: 10, // Maintain up to 10 socket connections
-        serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-        socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-        family: 4, // Use IPv4, skip trying IPv6
-        keepAlive: true, // Keep
-        // userNewUrlParser:true,
-        useUnifiedTopology: true //
-    }
-    
     mongoose.connect(
-        config.mongo.MONGO_URL,
-        optionConnect
+        config.MONGO_DB.URL_CONNECT,
+        connectOptions
     )
-
     // CONNECTION EVENTS
     // When successfully connected
     mongoose.connection.on('connected',()=>{
         console.log(`🥋  ~  Mongoose is connected ! worker process with ${process.pid} started`)
     })
-
     // If the connection throws an error
     mongoose.connection.on('error', (err)=> { 
         console.log(`🥋  ~  Mongoose default connection error: ` + err);
     }); 
-
     // When the connection is disconnected
     mongoose.connection.on('disconnected',  () =>{ 
         console.log(`🥋  ~  Mongoose default connection disconnected`); 
     });
-
     // If the Node process ends, close the Mongoose connection 
     process.on('SIGINT', ()=> {   
     mongoose.connection.close( ()=> { 
@@ -45,81 +37,33 @@ export const initDB_Event =  () => {
         process.exit(0); 
         }); 
     }); 
-
-    
 }
-
-
-
-
 export const initDB_Promise = async () => {
-    
-    const optionConnect = {
-        autoIndex: false, // Don't build indexes
-        maxPoolSize: 10, // Maintain up to 10 socket connections
-        serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-        socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-        family: 4, // Use IPv4, skip trying IPv6
-        keepAlive: true, // Keep
-        // userNewUrlParser:true, deprecated
-        useUnifiedTopology: true //
-
-    }
-
     return mongoose.connect(
-        config.mongo.MONGO_URL,
-        optionConnect
+        config.MONGO_DB.URL_CONNECT,
+        connectOptions
     )
     .then((db)=> console.log(`🥋  ~  Mongoose is connected ! worker process with ${process.pid} started`))       
     .catch((err)=> console.error(`🥋  ~  Mongoose could not connect.`,err) )        
 }
-
-
-///When you connect you can pick up the error in the callback:
-export const initDB_CallBack = () => {
-    
-        const optionConnect = {
-            autoIndex: false, // Don't build indexes
-            maxPoolSize: 10, // Maintain up to 10 socket connections
-            serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-            socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-            family: 4, // Use IPv4, skip trying IPv6
-            keepAlive: true, // Keep
-            // userNewUrlParser:true,
-            useUnifiedTopology: true //
-
-        }
-
-        return mongoose.connect(
-            config.mongo.MONGO_URL,
-            optionConnect,
-            (err) =>{
-                if(err){
-                    console.log(`🥋  ~  Mongoose could not connect.`,err)         
-                }else{
-                    console.log(`🥋  ~  Mongoose is connected ! worker process with ${process.pid} started` )
-                }
+export const initDB_CallBack = () => {   
+    return mongoose.connect(
+        config.MONGO_DB.URL_CONNECT,
+        connectOptions,
+        (err) =>{
+            if(err){
+                console.log(`🥋  ~  Mongoose could not connect.`,err)         
+            }else{
+                console.log(`🥋  ~  Mongoose is connected ! worker process with ${process.pid} started` )
             }
-        )        
+        }
+    )        
 }
-
-
 export const initDB_TryCatch = () => {
     try{
-        const optionConnect = {
-            autoIndex: false, // Don't build indexes
-            maxPoolSize: 10, // Maintain up to 10 socket connections
-            serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-            socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-            family: 4, // Use IPv4, skip trying IPv6
-            keepAlive: true, // Keep
-            // userNewUrlParser:true,
-            useUnifiedTopology: true //
-        }
-
         return mongoose.connect(
-            config.mongo.MONGO_URL,
-            optionConnect,
+            config.MONGO_DB.URL_CONNECT,
+            connectOptions,
             () =>{
                 console.log(`🥋  ~  Mongoose is connected ! worker process with ${process.pid} started` )
             }

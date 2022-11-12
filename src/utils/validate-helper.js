@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 
+
 const validateResult = (req,res,next) =>{
     try{
         validationResult(req).throw();
@@ -8,19 +9,19 @@ const validateResult = (req,res,next) =>{
     catch( err ){
         const data = err.array().map( err => {
             return {
-                    message : err.msg,
-                    parameter : err.param,
-                    value : err.value
+                message : err.msg,
+                parameter : err.param,
+                value : err.value
             }
         })
-
         res.status(403).send({
             status : "error",
             message : "Validation's error",
-            playload : { data : data } 
+            payload : { data : data } 
         })
     }
 }
+
 
 export default validateResult;
 

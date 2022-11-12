@@ -5,20 +5,22 @@ form.addEventListener('submit',(evt)=>{
     const data = new FormData(form);
     const obj = {}
     data.forEach((value,key)=>obj[key]=value);
-    fetch('/api/sessions/register',{
+    fetch('/api/session/register',{
         method:"POST",
         body:JSON.stringify(obj),
         headers:{
             "Content-Type":"application/json"
         }
     })
-    // .then(result=>result.json()).then(json=>{
-    //     console.log(json);
-    //     //form.reset()
-    //     if(json.status==="success"){
-    //         window.location.replace('/');
-    //     }        
-    // });
-
-
+    .then(result=>result.json())
+    .then(json=>{
+        console.log(json);
+        //form.reset()
+        if(json.status==="success"){
+            window.location.replace('/');
+        }       
+        else if(json.status=="error"){
+            document.getElementById("idMessage").innerHTML = `${json.message} : ${json.payload.data.map( data => data.message)} `;            
+        } 
+    });
 })

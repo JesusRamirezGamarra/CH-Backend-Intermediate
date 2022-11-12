@@ -25,7 +25,27 @@ const usersSchema = new mongoose.Schema({
         type:String,
         enum: ['user','admin'],
         default:'user'
-    }
+    },
+    cartId:{
+        type:Number,
+        required: false
+    },
+    adrees:{
+        type:String,
+        required: false
+    },
+    age:{
+        type:Number,
+        required: false
+    },    
+    phoneNumber:{
+        type:Number,
+        required: false
+    },     
+    avatarURL:{
+        type:String,
+        required: false
+    },      
 })
 
 // var options = {
