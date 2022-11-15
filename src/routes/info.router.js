@@ -3,8 +3,8 @@ import { fork } from 'child_process'
 import os from 'os';
 import compression from "compression";
 import moment from 'moment'
-import {__dirname} from '../utils/path-directory.js';
-import { logger } from '../utils/logger.js';
+import {__dirname} from '../utils/directory/root.directory.js';
+import { logger } from '../utils/logger/isLogger.js';
 
 
 const router = Router();

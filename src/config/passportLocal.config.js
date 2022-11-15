@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from 'passport-local';
 import userService from "../models/User.js";
-import { makeEncryptPass, isValidPassword } from "../utils/cripto.js";
+import { makeEncryptPass, isValidPassword } from "../utils/encript/string.encript.js";
 // import flash from 'connect-flash'
 
 const LocalStrategy = local.Strategy;

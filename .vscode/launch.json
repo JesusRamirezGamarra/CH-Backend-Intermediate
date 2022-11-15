@@ -36,7 +36,8 @@
                 "NODEMAILER_PASSWORD":"123",
                 "SESSION_SECRET": "SECRETO@@@",
                 "ADMIN_CONTACT_EMAIL":"luciojesusramirezgamarra@gmail.com",
-                "PERSISTENCE":"mongodb"
+                "PERSISTENCE":"mongodb",
+                "NOTFOUND_THUMBNAIL": "./img/notFound404.png"
             }
         }
     ]

@@ -181,9 +181,84 @@ response.formData() – devuelve la respuesta como un objeto FormData (codificac
 response.blob() – devuelve la respuesta como Blob (datos binarios tipados),
 response.arrayBuffer() – devuelve la respuesta como un objeto ArrayBuffer (datos binarios de bajo nivel)
 ```
+* response.json()
+
+```javascript
+  const jsonMessage = { 
+    status: hasJsonMessage.SUCCESS, 
+    message:`Product Create Sucessfully`, 
+    code:`` // Optional used for details summary 
+    payload:{data:product}, cause: undefined 
+  }
+
+  catch(err){
+    const jsonMessage = { 
+      status: hasJsonMessage.ERROR, 
+      message:`Product not found`, 
+      code:``// Optional used for details summary 
+      payload:{data:product}, cause: err 
+    }
+  }
+```
+
+* excepcion : para el uso de PascalCase en la nomenclatura 
+a ) Exportar `Class`
+Para :
+```javascript
+export default class GetProductModel {...}
+```
+Realizamos :
+```javascript
+const productService = new ProductService(ProductModel, GetProductModel, productDao, uuidv4)
+```
+b) Exportar `const`
+```javascript
+let productDao
+switch (config.PERSISTENCE) {
+    case 'mongodb':
+        const { default: ProductsDaoMongodb } = await import('./mongodb/product.mongodb.dao.js')
+        const { default: mongooseProductModel } = await import('./mongodb/product.mongoose.model.js')
+        productDao = new ProductsDaoMongodb(mongooseProductModel)
+    break
+    ...
+export { productDao }
+```
+* Nomenclatura para file ( archivo ) a ser exportado
+```javascript
+//Product concepts
+product.route.js
+product.controller.js
+product.service.js
+product-mongodb.dao.js
+product-mongoose.model.js
+product.validator.js
+//Global concepts
+isAdmin.middleware.js
+index-email-sender.js
+index-sms-sender.js
+index-path.util.js
+
+```
+
+Realizamos :
+```javascript
+const productService = new ProductService(ProductModel, GetProductModel, productDao, uuidv4)
+```
+
+* diferencia : res.send() , res.json() , res.end() [ver mas](https://medium.com/gist-for-js/use-of-res-json-vs-res-send-vs-res-end-in-express-b50688c0cddf)
+
 
 * Atajos de teclado para windows 10 [ver mas](https://www.xataka.com/basics/estos-son-los-mejores-gestos-y-atajos-de-teclado-para-windows-10)
 
 * Conceptos : 
 
 - JSON Payload : Payload is the essential information in a data block that you send to or receive from the server when making API requests. The Payload can be sent or received in a variety of formats, including JSON.31 oct 2021
+- Response.ok : 
+La propiedad de solo lectura ok de la interfaz Response contiene un Booleano que indica si la respuesta fue exitosa (estado en un rango de 200 a 299) o no. [ver mas](https://developer.mozilla.org/es/docs/Web/API/Response/ok)
+
+
+
+
+
+
+https://tailwindui.com/components/ecommerce/components/shopping-carts

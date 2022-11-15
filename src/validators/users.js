@@ -1,5 +1,5 @@
 import { check } from 'express-validator'
-import validateResult  from '../utils/validate-helper.js'
+import validateResult  from '../utils/helper/validate-helper.js'
 
 const validateUserRegister = [
     check('name')

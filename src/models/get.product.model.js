@@ -1,4 +1,4 @@
-import {hasJsonMessage} from '../config/config.js'
+import {hasJsonResult} from '../config/config.js'
 
 export default class GetProductModel {
     constructor(products) {
@@ -6,16 +6,17 @@ export default class GetProductModel {
     }
     get allProductsDto() {
         const products = this.products.map((product) => {
-            const { name, description, image, price, stock, id } = product
-            return { id, name, description, image, price, stock }
+            const { name, description, thumbnail, price, stock, id } = product
+            return { id, name, description, thumbnail, price, stock }
         })
-        return JSON.parse(JSON.stringify(products))
+        const jsonMessage = { result: hasJsonResult.SUCCESS, message:`getAll Product`, code:`getall_product`, payload:{data:products}, cause: undefined }
+        // return JSON.parse(JSON.stringify(products))
+        return JSON.parse(JSON.stringify(jsonMessage))
     }
     get oneProductDto() {
-        const { name, description, image, price, stock, id, thumbnail } = this.products
-        const product = { id, name, description, image, price, stock, thumbnail }
-        let jsonMessage = { status: hasJsonMessage.SUCCESS, message:`one Product`, payload:{data:product}, cause: undefined }        
-
+        const { name, description, thumbnail, price, stock, id } = this.products
+        const product = { id, name, description, thumbnail, price, stock }
+        const jsonMessage = { result: hasJsonResult.SUCCESS, message:` Product`, code:`product`, payload:{data:product}, cause: undefined }
         return JSON.parse(JSON.stringify(jsonMessage))
     }
 }

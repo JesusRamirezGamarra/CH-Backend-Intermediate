@@ -1,21 +1,21 @@
-import UserModel from '../models/user-model.js'
-import { usersDao } from '../daos/users/index.js'
-import cartService from './cart-service.js'
-import tokenGenerator from '../utils/token-generator.js'
-import idGenerator from '../utils/id-generator.js'
-import encryptPass from '../utils/encrypt-pass.js'
+import tokenGenerator from '../utils/generator/token.generator.js'
+import idGenerator from '../utils/generator/Id.generator.js'
+import {makeEncryptPass} from '../utils/encript/string.encript.js'
+import UserModel from '../models/user.model.js'
+import cartService from './cart.service.js'
+import { userDao } from '../daos/user/index.js'
 
 
 class UserService {
     #userModel
-    #usersDao
+    #userDao
     #cartService
     #tokenGenerator
     #idGenerator
     #encryptPass
-    constructor(UserModel, usersDao, cartService, tokenGenerator, idGenerator, encryptPass) {
+    constructor(UserModel, userDao, cartService, tokenGenerator, idGenerator, encryptPass) {
         this.#userModel = UserModel
-        this.#usersDao = usersDao
+        this.#userDao = userDao
         this.#cartService = cartService
         this.#tokenGenerator = tokenGenerator
         this.#idGenerator = idGenerator
@@ -26,7 +26,7 @@ class UserService {
             await this.#userExist(req.body.email)
             const userModel = new this.#userModel(this.#idGenerator, this.#encryptPass, req.body)
             const userDto = await userModel.dto()
-            const newUser = await this.#usersDao.create(userDto)
+            const newUser = await this.#userDao.create(userDto)
             if (!newUser)
                 throw {
                     message: 'Error creating user.',
@@ -34,7 +34,6 @@ class UserService {
                     status: 500,
                     expected: true,
                 }
-
             const userCart = await this.#cartService.create(newUser.id)
             if (!userCart)
                 throw {
@@ -43,26 +42,24 @@ class UserService {
                     status: 500,
                     expected: true,
                 }
-
             const token = this.#tokenGenerator(newUser)
-
             return { id: newUser.id, username: newUser.email, token }
         } 
-        catch (error) {
-            console.log({ error })
-            if (!error.expected)
-            error = {
+        catch (err) {
+            console.log({ err })
+            if (!err.expected)
+            err = {
                 message: 'Error registering user.',
                 code: 'register_error',
                 status: 500,
             }
-            delete error.expected
-            throw error
+            delete err.expected
+            throw err
         }
     }
     #userExist = async (email) => {
         try {
-            const user = await this.#usersDao.getByEmail(email)
+            const user = await this.#userDao.getByEmail(email)
             if (user)
                 throw {
                     message: 'Email already registered.',
@@ -72,20 +69,19 @@ class UserService {
                 }
             return false
         } 
-        catch (error) {
-            throw error
+        catch (err) {
+            throw err
         }
     }
 }
 const userService = new UserService(
     UserModel,
-    usersDao,
+    userDao,
     cartService,
     tokenGenerator,
     idGenerator,
-    encryptPass
+    makeEncryptPass
 )
 
 
-//----------* EXPORT SERVICE *----------//
 export default userService

@@ -1,6 +1,6 @@
 import  { Router } from 'express';
 import moment from 'moment'
-import { logger } from '../utils/logger.js';
+import { logger } from '../utils/logger/isLogger.js';
 import isAuthSession from '../middlewares/is.auth.js'
 
 

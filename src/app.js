@@ -1,11 +1,13 @@
 import cluster from 'cluster'
 import os from 'os'
-import { createServer } from 'http'
-import { Server } from "socket.io";
+// import { createServer } from 'http'
+// import { Server } from "socket.io";
 import config from './config/config.js';
-import app from './services/server.js';
-import { initDB_Event } from './services/db.js'
+import app from './services/server.service.js';
+import { initDB_Event } from './services/connectDB.js'
 
+import { Server as HttpServer } from 'http'
+import { Server as IOServer } from 'socket.io'
 
 
 const numCPUs = os.cpus().length;
@@ -21,22 +23,17 @@ if(config.INIT.MODO === 'CLUSTER' && cluster.isPrimary){
 else {
     const init = async () => {
         initDB_Event()
-        const server = createServer(app);
-        const io = new Server(server, { cors: { origin: "*" } });
+        const httpServer = HttpServer(app);
+        const io = new IOServer(httpServer, { cors: { origin: "*" } });
         global.io = io;
         // app.use((req, res, next) => {
         //     req.io = io;
         //     return next();
         // });
-        server.listen(config.INIT.PORT, () => {
-            console.log(`🎁  ~  Servidor escuchando en el puerto ${config.INIT.PORT} - worker process with ${process.pid} started , ready : http://localhost:${config.INIT.PORT}/`);
+        const server = httpServer.listen(config.INIT.PORT, () => {
+            console.log(`🎁  ~  Server listening on port  ${server.address().port} - worker process with ${process.pid} started , ready : http://localhost:${server.address().port}/`);
         });
         server.on('error', (error) => console.log(`Error en servidor: ${error}`));
-        
-
-
-
     }
     init()
 }
-// export default io;

@@ -1,11 +1,34 @@
-import { Router } from 'express'
-import cartController from '../Controllers/cart-controller.js'
-import isAuth from '../Middlewares/is-auth.js'
+// import loginService from '../services/token-login.service.js'
+import loginService from '../services/passport-login.service.js'
 
 
-const cartRouter = new Router()
-cartRouter.get('/', isAuth, cartController.getProducts)
-cartRouter.post('/', isAuth, cartController.addProduct)
-cartRouter.delete('/:productId', isAuth, cartController.deleteProduct)
+class LoginController {
+#loginService
 
-export default cartRouter
+constructor() {
+    this.#loginService = loginService
+    }
+
+    tokenLogin = async (req, res) => {
+        try {
+            const login = await this.#loginService.tokenLogin(req)
+            res.status(201).json(login)
+        } catch (err) {
+            res.status(err.status).json(err)
+        }
+    }
+    localPassportLogin = async (req, res) =>{
+        try{
+            const login = await this.#loginService.passportLogin(req)
+            res.status(201).json(login)
+        }catch (err) {
+            res.status(err.status).json(err)
+        }
+    }
+
+
+}
+
+
+const loginController = new LoginController(loginService)
+export default loginController

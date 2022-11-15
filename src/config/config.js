@@ -15,7 +15,7 @@ const {
 dotenv.config({
     path:MODE==="PROD"?'./.env.production':'./.env.development'
 });
-export const hasJsonMessage = {
+export const hasJsonResult = {
     SUCCESS:'success',
     ERROR:'error'
 }
@@ -103,4 +103,5 @@ export default {
     },
     TOKEN_EXP_TIME:     process.env.TOKEN_EXP_TIME,
     PERSISTENCE:        process.env.PERSISTENCE,
+    NOTFOUND_THUMBNAIL: process.env.NOTFOUND_THUMBNAIL, 
 }

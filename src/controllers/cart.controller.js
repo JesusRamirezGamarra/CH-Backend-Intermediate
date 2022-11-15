@@ -1,4 +1,4 @@
-import cartService from '../Services/cart-service.js'
+import cartService from '../Services/cart.service.js'
 
 
 class CartController {

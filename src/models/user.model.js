@@ -5,12 +5,12 @@ export default class UserModel {
     #first_name
     #last_name
     #phone
-    #image
+    #thumbnail
     #encryptPassword
     constructor(
         idGenerator,
         encryptPassword,
-        { password, email, first_name, last_name, phone, image }
+        { password, email, first_name, last_name, phone, thumbnail }
     ) {
         this.id = idGenerator()
         this.password = password
@@ -18,7 +18,7 @@ export default class UserModel {
         this.first_name = first_name
         this.last_name = last_name
         this.phone = phone
-        this.image = image
+        this.thumbnail = thumbnail
         this.#encryptPassword = encryptPassword
     }
 
@@ -30,7 +30,6 @@ export default class UserModel {
             expected: true,
             status: 400,
         }
-
         if (typeof id !== 'string')
         throw {
             message: 'The ID must be a string.',
@@ -125,22 +124,22 @@ export default class UserModel {
         }
         this.#phone = phone
     }
-    set image(image) {
-        if (!image)
+    set thumbnail(thumbnail) {
+        if (!thumbnail)
         throw {
             message: 'The image is required.',
             code: 'image_required',
             expected: true,
             status: 400,
         }
-        if (typeof image !== 'string')
+        if (typeof thumbnail !== 'string')
         throw {
             message: 'The image must be a string.',
             code: 'image_must_be_string',
             status: 400,
             expected: true,
         }
-        this.#image = image
+        this.#thumbnail = thumbnail
     }
     dto = async () => {
         const data = {
@@ -150,7 +149,7 @@ export default class UserModel {
             email: this.#email,
             password: await this.#encryptPassword(this.#password),
             phone: this.#phone,
-            image: this.#image,
+            thumbnail: this.#thumbnail,
         }
         return JSON.parse(JSON.stringify(data))
     }

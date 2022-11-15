@@ -1,29 +1,42 @@
 
-import express from "express";
-import handlebars from "express-handlebars";
-import session from "express-session";
-import passport from "passport";
+import express from 'express';
+import handlebars from 'express-handlebars';
+import session from 'express-session';
+import passport from 'passport';
 import MongoStore from 'connect-mongo';
-import moment from 'moment'
-import flash from 'connect-flash'
+import moment from 'moment';
+import flash from 'connect-flash';
 // import { io } from "socket.io-client";
 //import { Server } from "socket.io";
 // import compression from "compression";
-import {___dirname} from '../utils/path-directory.js';
-import config from '../config/config.js'
 import initializePassport from '../config/passportLocal.config.js';
-import { logger } from '../utils/logger.js';
+import {___dirname} from '../utils/directory/root.directory.js';
+import config from '../config/config.js';
+import { logger } from '../utils/logger/isLogger.js';
 // import pino from "pino"
 // import cors from 'cors'
-import viewsRouter from '../routes/views.router.js'
-import sessionRouter from '../routes/session.router.js'
-import randomRouter from '../routes/random.router.js'
-import profileRouter from '../routes/profile.route.js'
-import productRouter from "../routes/product.router.js"
+import viewsRouter from '../routes/views.router.js';
+import sessionRouter from '../routes/session.router.js';
+import infoRouter from '../routes/info.router.js';
+// import randomRouter from '../routes/random.router.js';
+        // import profileRouter from '../routes/profile.route.js';
+import productRouter from '../routes/product.router.js';
 import cartRouter from "../routes/cart.router.js";
+//import services from '../daos/index.js'
+// import productService from '../services/product.service.js'
+// import cartService from '../services/cart.service.js'
 
-import services from '../daos/index.js'
 
+// // // import logger from '../logs/logger.js'
+// // // import config from './Config/mongodb.js'
+// // // import chatRouter from './Routes/chat-router.js'
+// // // import infoRouter from './Routes/info-router.js'
+import loginRouter from '../routes/login.router.js'
+// // // import userRouter from './Routes/user-router.js'
+// // // import imageRouter from './Routes/image-router.js'
+// // // import productRouter from './Routes/product-router.js'
+// // // import cartRouter from './Routes/cart-router.js'
+// // // import orderRouter from './Routes/order-router.js'
 
 
 
@@ -94,43 +107,59 @@ app.use(function(req, res, next) {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// Routers
 ////////////////////////////////////////////////////////////////////////////////////////////////
-app.use('/',randomRouter);
+// app.use('/',randomRouter);
 app.use('/',viewsRouter);
-app.use('/',profileRouter);
+// app.use('/',profileRouter);
 app.use('/api/session',sessionRouter);
 // app.use('/',loginRouter)
 // app.use('/api/sessions',sessionsRouter);
+app.use('/',infoRouter)
 app.use('/api/product',productRouter);
 app.use('/api/cart',cartRouter);
+
+// app.use('/', chatRouter)
+// app.use('/info', infoRouter)
+app.use('/login', loginRouter)
+// app.use('/api/users', userRouter)
+// app.use('/api/images', imageRouter)
+// app.use('/api/products', productRouter)
+// app.use('/api/shoppingcartproducts', cartRouter)
+// app.use('/api/orders', orderRouter)
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // MANEJO DE RUTAS INEXISTENTES
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 app.get('/',async(req,res)=>{
-    if(!req.session.user) return res.redirect('/login')
-    let user = req.session.user
-    let listCart = await services.cartService.getCartProducts(req.session.user.cartID)
-    let total = await services.cartService.getTotal(user.cartID)
-    let endShop = `<form class="endshopForm"action="http://localhost:8080" method="post"><button id="endshop" class="endshop" formaction="/api/carts/endshop">Finalizar compra</button></form>`    
-    if(listCart.length ==0){
-        endShop = '<p>No tienes productos agregados</p>'
-        res.render("viewHome",{user,listCart,endShop,total})
-    }else{ 
-        res.render("viewHome",{user,listCart,endShop,total})}
-    io.on('connection',async(socket)=>{
-        let products = await services.productsService.getAll()
-        let datos = JSON.parse(products)
-        datos.push({cartID:user.cartID})
-        io.emit('lista',datos)    
-    })   
+    // if(!req.session.user) return res.redirect('/login')
+    // let user = req.session.user
+    // let listCart = await services.cartService.getCartProducts(req.session.user.cartID)
+    // let total = await services.cartService.getTotal(user.cartID)
+    // let endShop = `<form class="endshopForm"action="./" method="post"><button id="endshop" class="endshop" formaction="/api/carts/endshop">Finalizar compra</button></form>`    
+    // if(listCart.length ==0){
+    //     endShop = '<p>No tienes productos agregados</p>'
+    //     res.render("viewHome",{user,listCart,endShop,total})
+    // }else{ 
+    //     res.render("viewHome",{user,listCart,endShop,total})
+    // }
+    // io.on('connection',async(socket)=>{
+    //     let products = await services.productsService.getAll()
+    //     let datos = JSON.parse(products)
+    //     datos.push({cartID:user.cartID})
+    //     io.emit('lista',datos)    
+    // })   
 
     res.render("HomeAdmin",
                 {user:user}
     );
 })  
-
-
+app.all('*', (req, res) => {
+    res.status(404).json({
+        error: '404 Not Found',
+        description: `Route '${req.originalUrl}' method '${req.method}' not implemented.`,
+    })
+})
 app.use( (req,res) => {
     try{
         let fyh = new moment().format('DD/MM/YYYY HH:mm:ss')
