@@ -1,7 +1,7 @@
-import LoginModel from '../models/login.model.js'
-import { userDao } from '../daos/user/index.js'
-import tokenGenerator from '../utils/generator/token.generator.js'
-import isValidPassword from '../utils/encript/string.encript.js'
+import LoginModel from '../../models/auth/login-auth.model.js'
+import { userDao } from '../../daos/user/index.js'
+import tokenGenerator from '../../utils/generator/token.generator.js'
+import isValidPassword from '../../utils/encript/string.encript.js'
 
 class LoginService {
     #loginModel

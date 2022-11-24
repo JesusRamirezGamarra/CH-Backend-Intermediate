@@ -1,5 +1,5 @@
 import productService from '../services/product.service.js'
-import userController from './user.controller.js';
+// import userController from './user.controller.js';
 
 
 class ProductController {
@@ -15,24 +15,20 @@ class ProductController {
             res.status(err.status).json(err.err);
         }
     }
+    getSearch = async (req, res) => {
+        try {
+            const products = await this.#productService.getSearch(req);
+            // const products = await this.#productService.getAll();
+            res.render("Home", { data: products.payload.data, user : req.session.user});
+        } catch (err) {
+            res.status(err.status).json(err.err);
+        }
+    }    
     getAll = async (req, res) => {
         try {
             const products = await this.#productService.getAll();
-            // res.status(201).json(products);
-            // res.render("Home", 
-            //    [
-            //         { name:  "Yehuda Katz"},
-            //         { name:  "Alan Johnson"},
-            //         { name:  "Charles Jolley"}                
-            //     ]);
-            
-            let imageList = [];
-                imageList.push({ src: "icons/flask.png", name: "flask" });
-                imageList.push({ src: "icons/javascript.png", name: "javascript" });
-                imageList.push({ src: "icons/react.png", name: "react" });
-            let user = req.session.user;
-            res.render("Home", { data: products.payload.data, user : user});
-
+            // res.render("Home", { data: null, user : req.session.user});
+            res.render("Home", { data: products.payload.data, user : req.session.user});
         } catch (err) {
             res.status(err.status).json(err.err);
         }

@@ -256,9 +256,22 @@ const productService = new ProductService(ProductModel, GetProductModel, product
 - Response.ok : 
 La propiedad de solo lectura ok de la interfaz Response contiene un Booleano que indica si la respuesta fue exitosa (estado en un rango de 200 a 299) o no. [ver mas](https://developer.mozilla.org/es/docs/Web/API/Response/ok)
 
+* Librarys :
+- Free Icons SVG : [ver mas](https://heroicons.dev/)
+- Free Icons SVG(blog) : [ver mas](https://themesberg.com/blog/open-source/10-open-source-free-svg-icon-libraries)
+- Tailwind CSS : [ver mas](https://tailwindui.com/)
+- Tailwind CSS Components : [ver mas](https://tailwindui.com/)
+- Tailwind CSS eCommerce : [ver mas](https://tailwindui.com/components/ecommerce/components/shopping-carts)
+- Tailwind CSS : Visa, MasterCard, etc [ver mas](https://flowbite.com/docs/components/buttons/)
+ 
+* MongoDB: [ver mas](https://geekflare.com/es/mongodb-queries-examples/)
+- regex : [ver mas](https://www.mongodb.com/docs/manual/reference/operator/query/regex/#op._S_regex)
+- Json Viewer Parser : http://jsonviewer.stack.hu/
 
+* email Temporal [ver mas](https://temp-mail.org/es/)
+* ethereal : [ver mas](https://ethereal.email/)
+* script : [ver mas](https://lenguajehtml.com/html/scripting/etiquetas-html-scripts/)
 
+* Express-validators (sanitizers) [ver mas](https://github.com/validatorjs/validator.js#sanitizers)
 
-
-
-https://tailwindui.com/components/ecommerce/components/shopping-carts
+* SMS : [ver mas](https://www.twilio.com/es-mx/)

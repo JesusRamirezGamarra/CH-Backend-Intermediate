@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import moment from 'moment'
-import validateUserRegister from '../validators/users.js'
+import validateUserRegister from '../validators/user.validator.js'
 import passport from 'passport';
 
 const router = Router();
@@ -15,15 +15,15 @@ router.post('/register',
             // sucessRedirect:'/register-success',                        
             // badRequestMessage: "falta username / password",                    
         }
-        // ,(err,user,info)=>{
-        //     if (err) { return next(err); }
-        //     if (!user) { return res.redirect('/'); }
+        ,(err,user,info)=>{
+            if (err) { return next(err); }
+            if (!user) { return res.redirect('/'); }
 
-        //     req.logIn(user, function(err) {
-        //         if (err) { return next(err); }
-        //         return res.send(user);
-        //     });
-        // }
+            req.logIn(user, function(err) {
+                if (err) { return next(err); }
+                return res.send(user);
+            });
+        }
     ),
     (req,res)=>{
         try{

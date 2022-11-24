@@ -11,14 +11,12 @@ switch (config.PERSISTENCE) {
     default:
         throw {
             status: 500,
-            expected: true,
-            err: {
-                result : hasJsonResult.ERROR,
-                message: `Persistencia ${config.PERSISTENCE} no implementada.`,
-                code: 'persistence_not_implemented',
-                payload:{  data : undefined }, 
-                cause: undefined,                
-            }
+            result : hasJsonResult.ERROR,
+            message: `Persistence ${config.PERSISTENCE} not implemented.`,
+            code: 'persistence_not_implemented',
+            payload:{  data : undefined }, 
+            cause: undefined,                
+            expected: true,            
         }
 }
 

@@ -5,23 +5,30 @@ form.addEventListener('submit',(evt)=>{
     const data = new FormData(form);
     const obj = {}
     data.forEach((value,key)=>obj[key]=value);
-    // fetch('/api/session/login',{
-    fetch('/login/passport',{
+    fetch('/api/login/passport',{
         method:"POST",
         body:JSON.stringify(obj),
         headers:{
             "Content-Type":"application/json"
         }
     })
-    .then(result=>result.json()).then(json=>{
-        console.log(json);
-        //form.reset()
+    .then((res) => {
+        if (res.ok) {  return res.json(); }
+        return Promise.reject(res); 
+    })   
+    .then(json=>{
         if(json.result==="success"){
             window.location.replace('/');
-            // window.location.replace('/datos');
         }       
         else if(json.result=="error"){
-            document.getElementById("idMessage").innerHTML = `${json.message} : ${json.payload.data.map( data => data.message)} `;            
+            document.getElementById("idMessage").innerHTML =`${json.message}. Because ${json.cause}`;    
         } 
-    });
+    })
+    .catch((res) => {
+        document.getElementById("idMessage").innerHTML = `try again, if the error persists contact support. ${res.message}`;
+    })
+    .finally(() =>{
+
+    }); 
+    
 })

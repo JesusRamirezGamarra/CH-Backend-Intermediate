@@ -26,7 +26,7 @@ class ProductService {
             const uuid = this.#uuidv4();
             const newProduct = new this.#newProductModel(req.body);
             const newProductDto = newProduct.dto;
-            const product =  await this.#productDao.create({ ...newProductDto, id: uuid });
+            const product =  await this.#productDao.create({ ...newProductDto, sku: uuid });
             const productDto = new this.#getProductModel(product)
             return productDto.oneProductDto
         } 
@@ -46,6 +46,44 @@ class ProductService {
             throw err
         }
     }
+    getSearch = async (req) => {
+        try {
+            // let params = req.params.term;
+            let params = {name: eval(`/${req.params.term}/i`)};
+            let projection =  { projection: { _id: 0 } } ;
+            const allProducts = await this.#productDao.getSearch(params,projection  );
+            // let field = eval(`name`);
+            // let params =  eval(`/${req.params.term}/i`);
+            // let options = 'i' 
+            // let projection =  { projection: { _id: 0 } } ;
+            // // console.log(field)
+            // console.log(params)
+            // console.log(options)
+            // console.log(projection)
+            // const allProducts = await this.#productDao.getRegex(params,options,projection  );
+            // const allProducts = await this.#productDao.getSearch({name: param});
+            // const allProducts = await this.#productDao.getSearch('/'+ term + '/i')
+            // const allProducts = await this.#productDao.getSearch( term )
+            const products = new this.#getProductModel(allProducts)
+            return products.allProductsDto
+        } 
+        catch (err) {
+            console.log(err)
+            if (!err.expected)
+            err = {
+                status: 500,        
+                err: {
+                    result:hasJsonResult.ERROR,
+                    message: 'Failed to get search products.',
+                    code: 'get_search_products_error',
+                    payload:{  data : undefined}, 
+                    cause: undefined,                    
+                }
+            }
+            delete err.expected
+            throw err
+        }
+    }    
     getAll = async () => {
         try {
             const allProducts = await this.#productDao.getAll()
@@ -104,8 +142,9 @@ class ProductService {
     }
     updateById = async (req) => {
         try {
-            const product = await this.#productDao.getById(req.params.id)
-            if (!product)
+            
+            const currentproduct = await this.#productDao.getById(req.body.id)
+            if (!currentproduct)
             throw {
                 status: 404,
                 expected: true,
@@ -117,7 +156,11 @@ class ProductService {
                     cause: undefined ,    
                 }
             }
-            return await this.#productDao.updateById(req.params.id, req.body)
+            // const updateproduct = new this.#newProductModel(req.body);
+            const product =  await this.#productDao.updateById(currentproduct._id, req.body)
+            console.log(  product)
+            const productDto = new this.#getProductModel(product)
+            return productDto.oneProductDto
         } 
         catch (err) {
             if (!err.expected)

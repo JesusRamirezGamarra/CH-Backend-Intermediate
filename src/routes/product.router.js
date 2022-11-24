@@ -1,16 +1,18 @@
 import {Router} from 'express';
 // import services from '../daos/index.js';
 import __dirname from '../utils/directory/root.directory.js';
-import isAdmin from '../middlewares/is.admin.js';
+import isAdmin from '../middlewares/isadmin.middleware.js';
 import productController from '../controllers/product.controller.js';
 
 
+const path = 'product';
 const router = Router();
+router.get(`/${path}/search/:term`,productController.getSearch)
 // router.get('/',async(req,res)=>{
 //     let products= await services.productService.getAll()
 //     res.send(products)
 // })
-router.get('/',productController.getAll)
+router.get(`/${path}/`,productController.getAll)
 // router.get('/:pid',async(req,res)=>{
 //     let number = req.params.pid
 //     let data = await services.productService.getById(number)
@@ -18,7 +20,7 @@ router.get('/',productController.getAll)
 //     res.send({status:"success",data:data})
 //     // res.send({status:"success", message:"Product Added"})
 // })
-router.get('/:id',isAdmin, productController.getById);
+router.get(`/${path}/:id`,isAdmin, productController.getById);
 
 // router.post('/',isAdmin,async(req,res)=>{
 //     let producto = req.body
@@ -29,7 +31,9 @@ router.get('/:id',isAdmin, productController.getById);
         //     global.io.emit('lista',datos)
 //     res.send({status:"success", message:"Product Added"})
 // })
-router.post('/',isAdmin, productController.create)
+router.post(`/${path}/`,isAdmin, productController.create)
+router.put(`/${path}/`,isAdmin, productController.updateById)
+
 
 // router.put('/',isAdmin,async(req,res)=>{
 //     let product = req.body

@@ -6,13 +6,23 @@ const isAuthSession = (req, res, next) => {
     try{
         //if(!req.isAuthenticated())  res.redirect('/login') 
         //if(!req.session.authenticated )  res.redirect('/login') 
-        if(!req.session.user)   res.redirect('/login') 
-        else    next();    
+        
+        
+        //if(!req.session.user)   res.redirect('/login') 
+        // if(!req.session.user)   res.redirect('/login') 
+        // else    next();    
+
+        if( req.isAuthenticated() ) return next();
+        res.redirect('/login') 
+
     }
     catch(err){
         logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
     }        
 } 
+
+
+
 const isAuthJWT = (req, res, next) => {
     const headerAuthorization = req.headers['authorization'] || req.headers['Authorization'] || ''
     if (!headerAuthorization) {

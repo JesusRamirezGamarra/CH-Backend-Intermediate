@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./src/app.js -e=PROD -m=FORK",
-    "DEV": "nodemon ./src/app.js -e=PROD -m=FORK",
+    "DEV": "nodemon ./src/app2.js -e=PROD -m=FORK",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

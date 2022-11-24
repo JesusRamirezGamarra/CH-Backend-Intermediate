@@ -7,34 +7,38 @@ import productController from '../controllers/product.controller.js';
 // import io from '../app.js';
 
 const router = Router();
+router.get('/about',(req,res)=>{
+    res.render('about');
+})
+
 router.get('/register', async(req, res) => {
     res.render('register');
 });
-router.get('/register-success', async(req, res) => {
-    res.render('usuarioCreado');
-});
-router.get('/register-error', async(req, res) => {
-    res.send({  status:"error",
-                message:"User's Not Created",
-                payload:{data:res.locals.error_message.map( err => {return {message : err,parameter : undefined,value : undefined}})}})
-    // res.render('register',
-    //     { name: "Kushan", age: 24},
-    //     (err,html)=>{
-    //         res.status(209).send({    
-    //             status:"error",
-    //             message:"User's Not Created",
-    //             payload:{data:res.locals.error_message.map( err => {return {message : err,parameter : undefined,value : undefined}})}
-    //         })
-    //     }
-    // )
-    // res.render("register", {
-    //     name: "Kushan", age: 24
-    // });
+// router.get('/register-success', async(req, res) => {
+//     res.render('usuarioCreado');
+// });
+// router.get('/register-error', async(req, res) => {
+//     res.send({  status:"error",
+//                 message:"User's Not Created",
+//                 payload:{data:res.locals.error_message.map( err => {return {message : err,parameter : undefined,value : undefined}})}})
+//     // res.render('register',
+//     //     { name: "Kushan", age: 24},
+//     //     (err,html)=>{
+//     //         res.status(209).send({    
+//     //             status:"error",
+//     //             message:"User's Not Created",
+//     //             payload:{data:res.locals.error_message.map( err => {return {message : err,parameter : undefined,value : undefined}})}
+//     //         })
+//     //     }
+//     // )
+//     // res.render("register", {
+//     //     name: "Kushan", age: 24
+//     // });
 
 
-    //res.render('register');
-    //res.render('register-error')
-});
+//     //res.render('register');
+//     //res.render('register-error')
+// });
 router.get('/',productController.getAll)
     
     // productController.getAll()
@@ -81,26 +85,6 @@ router.get('/admin',async(req,res)=>{
 
 router.get('/login',(req,res)=>{
     res.render('login');
-})
-router.get('/data',(req,res)=>{
-    try{
-        if(!req.session.user) 
-            return res.redirect('/login');
-        res.render('data',{user:req.session.user});
-    }
-    catch(err){
-        logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
-    }
-})
-router.get('/datos', isAuthSession, async(req, res,) => {
-    try{
-        const datos = req.user
-        const nombre = datos.username
-        res.render('datos', {nombre})
-    }
-    catch(err){
-        logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
-    }        
 })
 router.get('/logout', (req, res) => {
     try{

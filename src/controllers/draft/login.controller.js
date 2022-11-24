@@ -25,8 +25,6 @@ constructor() {
             res.status(err.status).json(err)
         }
     }
-
-
 }
 
 

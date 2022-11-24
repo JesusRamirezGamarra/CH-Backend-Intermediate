@@ -108,7 +108,7 @@ app.use(function(req, res, next) {
 /// Routers
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // app.use('/',randomRouter);
-app.use('/',viewsRouter);
+
 // app.use('/',profileRouter);
 app.use('/api/session',sessionRouter);
 // app.use('/',loginRouter)
@@ -116,10 +116,12 @@ app.use('/api/session',sessionRouter);
 app.use('/',infoRouter)
 app.use('/api/product',productRouter);
 app.use('/api/cart',cartRouter);
+app.use('/login', loginRouter)
+app.use('/',viewsRouter);
 
 // app.use('/', chatRouter)
 // app.use('/info', infoRouter)
-app.use('/login', loginRouter)
+
 // app.use('/api/users', userRouter)
 // app.use('/api/images', imageRouter)
 // app.use('/api/products', productRouter)
@@ -131,7 +133,7 @@ app.use('/login', loginRouter)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // MANEJO DE RUTAS INEXISTENTES
 ////////////////////////////////////////////////////////////////////////////////////////////////
-app.get('/',async(req,res)=>{
+// app.get('/',async(req,res)=>{
     // if(!req.session.user) return res.redirect('/login')
     // let user = req.session.user
     // let listCart = await services.cartService.getCartProducts(req.session.user.cartID)
@@ -150,10 +152,10 @@ app.get('/',async(req,res)=>{
     //     io.emit('lista',datos)    
     // })   
 
-    res.render("HomeAdmin",
-                {user:user}
-    );
-})  
+//     res.render("HomeAdmin",
+//                 {user:user}
+//     );
+// })  
 app.all('*', (req, res) => {
     res.status(404).json({
         error: '404 Not Found',

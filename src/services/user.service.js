@@ -1,9 +1,10 @@
 import tokenGenerator from '../utils/generator/token.generator.js'
-import idGenerator from '../utils/generator/Id.generator.js'
+import idGenerator from '../utils/generator/id.generator.js'
 import {makeEncryptPass} from '../utils/encript/string.encript.js'
 import UserModel from '../models/user.model.js'
 import cartService from './cart.service.js'
 import { userDao } from '../daos/user/index.js'
+import {newUserEmailTemplate} from '../senders/email/template/newuser-template.email.js'
 
 
 class UserService {
@@ -34,6 +35,7 @@ class UserService {
                     status: 500,
                     expected: true,
                 }
+
             const userCart = await this.#cartService.create(newUser.id)
             if (!userCart)
                 throw {
@@ -44,6 +46,8 @@ class UserService {
                 }
             const token = this.#tokenGenerator(newUser)
             return { id: newUser.id, username: newUser.email, token }
+
+            // await this.#sendNotificationEmail(newUser)
         } 
         catch (err) {
             console.log({ err })
@@ -73,6 +77,23 @@ class UserService {
             throw err
         }
     }
+    #sendNotificationEmail = async (newUser) => {
+        try {
+            const template = newUserEmailTemplate(newUser)
+            await transporter.sendMail(template)
+        } catch (error) {
+            console.log({ error })
+            if (!error.expected)
+            error = {
+                message: 'Error sending notification.',
+                code: 'send_notification_error',
+                status: 500,
+            }
+
+            delete error.expected
+            throw error
+        }
+    }    
 }
 const userService = new UserService(
     UserModel,

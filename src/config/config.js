@@ -9,7 +9,7 @@ const {
 }= minimist(process.argv.slice(2),
             {
                 alias:{e:"MODE",p:"PORT",m:"MODO"},
-                default:{e:'DEV',p:8085,m:"FORK"}
+                default:{e:'DEV',p:8087,m:"FORK"}
             }
 )
 dotenv.config({
@@ -24,7 +24,8 @@ export default {
         MODE:   process.env.MODE||MODE||'DEV',
         PORT:   process.env.PORT||PORT||'8080',
         MODO:   process.env.MODO||MODO||'FORK',        
-        DEBUG:   process.env.DEBUG||'true'        
+        DEBUG:   process.env.DEBUG||'true',
+        IS_CLUSTER:   (process.env.MODO||MODO === 'CLUSTER')?true:false,
     },
     APP:{
         DOMAIN: process.env.DOMAIN
@@ -48,7 +49,22 @@ export default {
             USE_UNIFIED_TOPOLOGY:           true
         },
         SECRET:     process.env.SESSION_SECRET||undefined
-    },   
+    },
+    FIREBASE: {
+        SERVICE_ACCOUNT: {
+            TYPE: process.env.FIREBASE_TYPE,
+            PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
+            PRIVATE_KEY_ID: process.env.FIREBASE_PRIVATE_KEY_ID,
+            PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY,
+            CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL,
+            CLIENTE_ID: process.env.FIREBASE_CLIENT_ID,
+            AUTH_URI:  process.env.FIREBASE_AUTH_URI,
+            TOKEN_URI: process.env.FIREBASE_TOKEN_URI,
+            AUTH_PROVIDER_X509_CERT_URL: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+            CLIENTE_X509_CERT_URL: process.env.FIREBASE_CLIENT_X509_CERT_URL
+        },
+        BASEURL: process.env.FIREBASE_URL
+    },       
     MONGO_DB:{
         USER:       process.env.MONGODB_USER||undefined,
         PASSWORD:   process.env.MONGODB_PASSWORD||undefined,

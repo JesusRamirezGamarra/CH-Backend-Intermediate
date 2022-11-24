@@ -9,24 +9,39 @@ class ProductsDaoMongodb {
 			return await this.#mongooseProductModel.create(newProduct);
 		} catch (err) { throw err; }
 	};
+	// getRegex = async (params,options,projection) => {
+	// 	try {
+	// 			// console.log(field)
+	// 			console.log(params)
+	// 			console.log(options)
+	// 			console.log(projection)
+
+	// 		return await this.#mongooseProductModel.find({ name: { $regex: params, $options: 'i' },projection }).lean();
+	// 	} catch (err) { throw err; }
+	// };		
+	getSearch = async (params,projection) => {
+		try {
+			return await this.#mongooseProductModel.find(params,projection ).lean();
+		} catch (err) { throw err; }
+	};	
 	getAll = async () => {
 		try {
-			return await this.#mongooseProductModel.find();
+			return await this.#mongooseProductModel.find().lean();
 		} catch (err) { throw err; }
 	};
-	getById = async (productId) => {
+	getById = async (id) => {
 		try {
-			return await this.#mongooseProductModel.findOne({ id: productId });
+			return await this.#mongooseProductModel.findOne({ sku: id });
 		} catch (err) { throw err; }
 	};
-	updateById = async (productId, productData) => {
+	updateById = async (id, data) => {
 		try {
-			return await this.#mongooseProductModel.findOneAndUpdate({ id: productId }, productData, { new: true });
+			return await this.#mongooseProductModel.findOneAndUpdate({ _id: id }, data, { new: true });
 		} catch (err) { throw err; }
 	};
-	deleteById = async (productId) => {
+	deleteById = async (id) => {
 		try {
-			return await this.#mongooseProductModel.findOneAndDelete({ id: productId });
+			return await this.#mongooseProductModel.findOneAndDelete({ _id: id });
 		} catch (err) { throw err;}
 	};
 }

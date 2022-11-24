@@ -1,4 +1,5 @@
 import { validationResult } from 'express-validator';
+import { hasJsonResult } from '../../config/config.js'
 
 
 const validateResult = (req,res,next) =>{
@@ -8,6 +9,8 @@ const validateResult = (req,res,next) =>{
     }
     catch( err ){
         const data = err.array().map( err => {
+            // if ( err.param === 'password' || err.param === 'repassword') err.value =  '****'
+            err.value = ( err.param === 'password' || err.param === 'repassword') ?   '****' :  err.value;
             return {
                 message : err.msg,
                 parameter : err.param,
@@ -15,9 +18,12 @@ const validateResult = (req,res,next) =>{
             }
         })
         res.status(403).send({
-            status : "error",
-            message : "Validation's error",
-            payload : { data : data } 
+            status:403,
+            result:hasJsonResult.ERROR,
+            message : `Validation's error`,
+            code: `Validation_error`,
+            payload:{  data : data }, 
+            cause: err,            
         })
     }
 }

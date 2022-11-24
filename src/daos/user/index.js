@@ -10,12 +10,16 @@ switch (config.PERSISTENCE) {
     break
     default:
         throw {
-            message: `Persistencia ${config.PERSISTENCE} no implementada.`,
-            code: 'persistence_not_implemented',
-            expected: true,
             status: 500,
+            result:hasJsonResult.ERROR,
+            message: `Persistence ${config.PERSISTENCE} not implemented.`,
+            code: 'persistence_not_implemented',
+            payload:{  data : undefined }, 
+            cause : undefined,
+            expected: true,
         }
 }
+
 
 export { userDao }
 
