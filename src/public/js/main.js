@@ -6,13 +6,13 @@ let totalCard = 0;
 let countProduct = 0;
 const searchForm = document.getElementById('searchForm');
 
+//buyThings = ( sessionStorage.getItem('CODERSHOP') == null )?[]: sessionStorage.getItem('CODERSHOP');
+buyThings = ( sessionStorage.getItem('CODERSHOP') == null )?[]: JSON.parse('[' + sessionStorage.getItem("CODERSHOP") + ']')[0];
 
 searchForm.addEventListener('submit',(e)=>{
     e.preventDefault();
     if(document.forms.searchForm.q.value.trim())
         window.location.replace('/api/product/search/'+ document.forms.searchForm.q.value.trim());
-
-
     // const term = document.forms.searchForm.q.value.trim()
     // if (term){
     //     const data = new FormData(searchForm);
@@ -49,22 +49,22 @@ addProduct = (domumentItemProduct) =>{
         image: domumentItemProduct.parentElement.querySelector('div img').src,
         title: domumentItemProduct.parentElement.querySelector('h3').textContent,
         price: domumentItemProduct.parentElement.querySelector('p').textContent.split(' ')[1],
-        id: domumentItemProduct.parentElement.dataset.id,
+        productId: domumentItemProduct.parentElement.dataset.id,
         fyh: new Date().getTime(),
-        amount: 1
+        quantity: 1
     }    
     readTheContent(infoProduct);    
 }
 deleteProduct = (domumentItemProduct) =>{
     const deleteId = domumentItemProduct.dataset.id
     buyThings.forEach(value => {
-        if (value.id == deleteId) {
-            let priceReduce = parseFloat(value.price) * parseFloat(value.amount);
+        if (value.productId == deleteId) {
+            let priceReduce = parseFloat(value.price) * parseFloat(value.quantity);
             totalCard =  totalCard - priceReduce;
             totalCard = totalCard.toFixed(2);
         }
     });
-    buyThings = buyThings.filter(product => product.id !== deleteId);
+    buyThings = buyThings.filter(product => product.productId !== deleteId);
     countProduct--;
     if (buyThings.length === 0) {
         priceTotal.innerHTML = 0;
@@ -75,11 +75,11 @@ deleteProduct = (domumentItemProduct) =>{
 readTheContent = (infoProduct) =>{
     totalCard = parseFloat(totalCard) + parseFloat(infoProduct.price);
     totalCard = totalCard.toFixed(2);
-    const exist = buyThings.some(product => product.id === infoProduct.id);
+    const exist = buyThings.some(product => product.productId === infoProduct.productId);
     if (exist) {
         const pro = buyThings.map(product => {
-            if (product.id === infoProduct.id) {
-                product.amount++;
+            if (product.productId === infoProduct.productId) {
+                product.quantity++;
                 product.fyh =  new Date().getTime();
                 return product;
             } else {
@@ -95,11 +95,11 @@ readTheContent = (infoProduct) =>{
 }
 loadHtml = () =>{
     clearHtml();
-    buyThings = buyThings.sort(function(a,b){
+    buyThings = buyThings.sort( (a,b)=>{
         return  new Date(b.fyh) - new Date(a.fyh);
     });
     buyThings.forEach(product => {
-        const {image, title, price, amount, id} = product;
+        const {image, title, price, quantity, productId} = product;
         const row = document.createElement('div');
         row.classList.add('item');
         row.innerHTML = `
@@ -107,9 +107,9 @@ loadHtml = () =>{
             <div class="item-content">
                 <h5>${title}</h5>
                 <h5 class="cart-price">$ ${price}</h5>
-                <h6>Amount: ${amount}</h6>
+                <h6>Amount: ${quantity}</h6>
             </div>
-            <span class="delete-product" data-id="${id}" onclick="deleteProduct(this)">
+            <span class="delete-product" data-id="${productId}" onclick="deleteProduct(this)">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
                 </path>
@@ -120,93 +120,68 @@ loadHtml = () =>{
         priceTotal.innerHTML = totalCard;
         amountProduct.innerHTML = countProduct;
     });
+
+    ( buyThings.length == 0 ) ? document.forms.checkOutForm.elements.btnCheckout.classList.add('hidden') : document.forms.checkOutForm.elements.btnCheckout.classList.remove('hidden');    
+    sessionStorage.setItem('CODERSHOP',   JSON.stringify(buyThings) );
+    //sessionStorage.setItem('CODERSHOP',  JSON.stringify({data: buyThings}) );
+
 }
 clearHtml = () =>containerBuyCart.innerHTML = '';
 
+let checkOut = document.getElementById('checkOutForm')
 
+const handleCheckOutSubmit = (evt,form,route) =>{    
+    evt.preventDefault()
+    //let obj = buyThings.map( product => (   { product: `ObjectId("${product. productId}")`, quantity: product.quantity }  ));
+    let obj = buyThings.map( product => (   { product: product. productId, quantity: product.quantity }  ));
+    fetch(route,{
+        redirect: 'manual',
+        method:"POST",
+        body:JSON.stringify(obj),
+        headers:{
+            "Content-Type":"application/json"
+        },
+    })
+    .then((res) => {
+        if (res.ok) {  return res.json(); }
+        return Promise.reject(res); 
+    }) 
+    .then(json=>{
+        if(json.result==="success"){
+            // console.log("success");
+            // sessionStorage.clear();
+            // let data =  JSON.stringify({data: json.payload.data.products});
+            // sessionStorage.setItem(json.payload.data.sessionId, data);
+            // data = JSON.parse(sessionStorage.getItem(json.payload.data.sessionId));
+            // let data =  JSON.stringify({data: buyThings});
+            // sessionStorage.setItem('CODERSHOP', buyThings);
+            // data = JSON.parse(sessionStorage.getItem('CODERSHOP'));
+            
+            
+            window.location.replace('api/order/checkout');
+        }
+        else if(json.result=="error"){
+            console.log("error");
+        }
+    })
+    .catch((res) => {
+        console.log("catch",res);
+        window.location.replace('/login');
+    })
+    .finally(() =>{
+        console.log("finally");
+    })
+};
+checkOut.addEventListener('submit',(e)=>handleCheckOutSubmit(e,e.target,'/api/cart/'))
 
-// // // let socket= io({
-// // //     autoConnect:true
-// // // })
-// window.onload = function () {
-//     // console.log("function called...");
-//     // [... document.forms.updateProductForm.elements].forEach(el => el.disabled  = true );
-//     fetch('/api/product/',{
-//         method:"GET",
-//         headers:{
-//             // Accept: "application/json",
-//             "Content-Type":"application/json"
-//         }
-//     })
-//     .then((response) => {
-//         if (response.ok) {  return response.json(); }
-//         return Promise.reject(response); 
-//     })    
-//     // .then(json=>{
-//     //     if(json.result==="success"){
-//     //         // document.getElementById("idMessageUpdateProduct").innerHTML = `${json.message} Found`;            
-//     //     }
-//     //     else if(json.result=="error"){
-//     //         // document.getElementById("idMessageUpdateProduct").innerHTML = `${json.message} `;                     
-//     //     }
-//     // })
-//     // .catch((response) => {
-//     //     response.json()
-//     //     .then( json  => {
-//     //         // document.getElementById("idMessageProduct").innerHTML = `Found 0 product's , try again if the error persists contact support`
-//     //     })
-//     // })
-//     .finally(() =>{
-//         // [... document.forms.updateProductForm.elements].forEach(el => el.disabled  = false );
-//     });         
-// }
-
-
-
-
-// socket.on('lista',data=>{
-//     let log = "";// document.getElementById('lista');
-//     let list = "";
-//     Array.from(data).forEach(product => {
-//         if(!product.id) return ''
-//         list = list+`
-//     <tr>
-//         <th scope="row">${product.id}</th>
-//         <td>${product.code} </td>
-//         <td>${product.name} </td>
-//         <td>${product.description} </td>
-//         <td>${product.price} </td>
-//         <td>${product.stock} </td>
-//         <td> <img src="${product.thumbnail}" alt="El enlace no esta disponible" width="60"></td>    
-//         <td><button type="submit" formaction="/api/carts/products/${product.id}"> +1 </button></td> 
-//     </tr>`
-//     });
-//     console.log(list);
-//     //log.innerHTML = list;
-//     //document.getElementById("productosForm").reset()
-// })
-
-// let deleteForm = document.getElementById('deleteForm')
-// const deleteSubmit = async(evt,form,route) =>{
-//     evt.preventDefault()
-//     let formData = new FormData(form);
-//     let obj = {};
-//     formData.forEach((value,key)=>obj[key]=value);
-//     fetch(route,{
-//         method:"DELETE",
-//         body:JSON.stringify(obj),
-//         headers:{
-//             "Content-Type":"application/json"
-//         }
-//     }).then(res =>res.json()).then(json=>console.log(json));
-//     await sleep(900)
-//     window.location.href = "http://localhost:8080/"
-// }
-// deleteForm.addEventListener('submit',(e)=>deleteSubmit(e,e.target,'/api/products'))
-
-
-
-
-
-
+load = () => {
+    if (buyThings.length > 0){
+        loadHtml();
+        countProduct = buyThings.length
+        buyThings.forEach((item) =>{
+            readTheContent(item);
+        })
+    }
+}
+load ();
 

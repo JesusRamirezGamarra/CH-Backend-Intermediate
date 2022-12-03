@@ -39,6 +39,7 @@ import userRouter from '../routes/user.router.js';
 
 import productRouter from '../routes/product.router.js';
 import cartRouter from "../routes/cart.router.js";
+import orderRouter from "../routes/order.router.js";
 
 
 // import sessionRouter from '../routes/session.router.js';
@@ -95,6 +96,7 @@ export default class Server{
             cookie: {
                 maxAge: ttlSeconds * 1000 * 30,
                 expires: ttlSeconds * 1000 * 30,
+                secure : false,
             // httpsonly:true,
             // path:"/",
             },  
@@ -122,28 +124,22 @@ export default class Server{
         //     useTempFiles : true,
         //     tempFileDir : '/tmp/'
         // }));
-        this.app.use((req, res, next) => {
-            req.io = this.socket;
-            next()
-        })
+        // this.app.use((req, res, next) => {
+        //     req.io = this.socket;
+        //     next()
+        // })
     }
 
     routes() {
 
-        this.app.use('/',infoRouter)
+        this.app.use('/',infoRouter);
         this.app.use('/',viewRouter);
-
-        this.app.use('/api/login', loginRouter)
-        this.app.use('/api/user', userRouter)        
-
-
-        this.app.use('/api/product',productRouter);
-        this.app.use('/api/cart',cartRouter);
-
-
-
-
-
+        this.app.use('/api', loginRouter);
+        this.app.use('/api', userRouter);
+        this.app.use('/api',productRouter);
+        this.app.use('/api',cartRouter);
+        this.app.use('/api',orderRouter);
+        
 
         // this.app.use('/', Views);
         // this.app.use('/auth', APIAuth);
@@ -158,10 +154,6 @@ export default class Server{
         // this.app.use('/api/session',sessionRouter);
         // app.use('/',loginRouter)
         // app.use('/api/sessions',sessionsRouter);
-        
-        
-        
-
         // app.use('/', chatRouter)
         // app.use('/info', infoRouter)
         
@@ -176,19 +168,12 @@ export default class Server{
                 let fyh = new moment().format('DD/MM/YYYY HH:mm:ss')
                 let url =  req.protocol + '://' + req.get('host') + req.originalUrl;
                 logger.warn(`${fyh}  || PATH: ${req.path} || Mehotd: ${req.method} || status: Page Not Fount || URL: ${url }`)
-                res.render("404");
+                res.status(404).render("404");
             }
             catch(err){
                 logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
             }
         })        
-
-        // this.app.use('/*', (req, res) => {
-        //     res.status(400).send({
-        //         error: -2,
-        //         descripcion: `La ruta '${req.baseUrl}' con el método [${req.method}] no existe.`
-        //     })
-        // })
     }
 
     engines() {
@@ -200,6 +185,9 @@ export default class Server{
             layoutsDir: layoutDirPath,
             defaultLayout: defaultLayerPth,
             partialsDir: partialDirPath,
+            helpers : {
+                subtotal :  (val1,val2)=>{     return val1 * val2; }
+            }
         }));
         this.app.set('view engine','.hbs');
         this.app.set('views',___dirname+'\\views')        

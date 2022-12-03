@@ -10,7 +10,7 @@ console.log(___dirname)
     to: `${config.CONTACT_EMAIL.ADMIN.ALIAS} <${config.CONTACT_EMAIL.ADMIN.EMAIL}>`,
     subject: 'Welcome to coder shop: ' + user_data.first_name + ' '+ user_data.last_name,
     html: `<p align="center"><p align="center">
-    <img src="cid:avatar" alt="BFFs" height="250"></p><p align="center">Coder Shop</p></p>
+    <img src="cid:avatar" alt="BFFs" height="100"></p><p align="center">Coder Shop</p></p>
     <br>
     <h1>User: ${user_data.email}</h1>
         <p><b>Name:</b> ${user_data.first_name} ${user_data.last_name}</p>

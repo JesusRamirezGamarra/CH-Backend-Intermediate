@@ -53,6 +53,7 @@ const handleAddProductSubmit = (evt,form,route) =>{
     });        
 }
 addProductForm.addEventListener('submit',(e)=>handleAddProductSubmit(e,e.target,'/api/product'))
+
 let updateProductForm = document.getElementById('updateProductForm')
 const handleUpdateProductSubmit = (evt,form,route) =>{
     evt.preventDefault()
@@ -102,6 +103,7 @@ const handleUpdateProductSubmit = (evt,form,route) =>{
     });        
 }
 updateProductForm.addEventListener('submit',(e)=>handleUpdateProductSubmit(e,e.target,'/api/product'))
+
 let findProduct = document.getElementById('id')
 const handleFindProductSubmit = (evt,form,route) =>{
     if ( findProduct.value.length !== 36 ) {

@@ -273,5 +273,24 @@ La propiedad de solo lectura ok de la interfaz Response contiene un Booleano que
 * script : [ver mas](https://lenguajehtml.com/html/scripting/etiquetas-html-scripts/)
 
 * Express-validators (sanitizers) [ver mas](https://github.com/validatorjs/validator.js#sanitizers)
-
+  - ejemplos [ver mas](https://codigoencasa.com/validacion-de-entradas-de-usuario-en-su-aplicacion-express-js-con-express-validator/)
 * SMS : [ver mas](https://www.twilio.com/es-mx/)
+* await : [ver mas](https://dev.to/lydiahallie/javascript-visualized-promises-async-await-5gke)
+* handleBars : 
+  - with express  [ver mas](https://www.npmjs.com/package/express-handlebars)
+  - register helpers : [ver mas](https://es.stackoverflow.com/questions/410141/dificultad-con-handlebars-registerhelper-en-handlebars)
+  - Ejemplos helpers : [ver mas](https://www.cloudhadoop.com/handlebarjs-if-helper/)
+
+* ecomerce 
+  - Front ReactJS y Backend : [ver mas](https://www.youtube.com/watch?v=R4eLKuzg2WU)
+
+
+  * bugs : 
+   - redirect after a fetch post call [ver mas](https://stackoverflow.com/questions/39735496/redirect-after-a-fetch-post-call)
+
+   * mongoDB :
+   - arrays parte 1 : [ver mas](https://dev.to/paulasantamaria/mongodb-animated-adding-and-removing-elements-from-arrays-50cl) 
+   - arrays parte 2 : [ver mas](https://dev.to/paulasantamaria/mongodb-animated-updating-elements-in-arrays-2phi)
+
+   * HandleBars : 
+   - Manual : [ver mas](https://1library.co/document/ydljjd6z-handlebars-introducci%C3%B3n-instalaci%C3%B3n-handlebars-copyright-academy-reservados-derechos.html)

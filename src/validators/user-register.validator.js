@@ -1,7 +1,7 @@
 import { check } from 'express-validator'
 import validateResult  from '../utils/helper/validate-helper.js'
 
-const validateUserRegister = [
+const validate = [
     check('firstname')
         .exists()
         .not()
@@ -19,7 +19,9 @@ const validateUserRegister = [
         .exists()
         .not()
         .isEmpty()
-        .isMobilePhone(['es-PE']),
+        .isMobilePhone(),
+        //.isMobilePhone([],[{strictMode:true}]),
+        // .isMobilePhone([{ locale: "any" }])
         //.isMobilePhone({strictMode:true}),
     check('username')
         .exists()
@@ -42,4 +44,4 @@ const validateUserRegister = [
         }
 ]
 
-export default validateUserRegister;
+export default validate;

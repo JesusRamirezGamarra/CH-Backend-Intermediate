@@ -1,4 +1,4 @@
-import {hasJsonResult} from '../config/config.js'
+import {hasJsonResult} from '../../config/config.js'
 
 export default class ProductModel {
     #name

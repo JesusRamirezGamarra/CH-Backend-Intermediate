@@ -2,9 +2,11 @@
 // import CartModel from '../Models/cart-model.js'
 // import { cartDao } from '../Daos/carts/index.js'
 // import { productsDao } from '../Daos/products/index.js'
-import cartModel from '../models/cart.model.js'
-import {cartDao} from '../daos/cart/index.js'
-import {productDao} from '../daos/product/index.js'
+import cartModel from '../models/cart/cart.model.js'
+// import cartNewUserModel from '../models/cart/cart-newuser.model.js'
+import { cartDao } from '../daos/cart/index.js'
+import { productDao } from '../daos/product/index.js'
+import config, {hasJsonResult} from '../Config/config.js'
 
 
 class CartService {
@@ -13,93 +15,205 @@ class CartService {
     #productDao
     constructor(cartModel, cartDao, productDao) {
         this.#cartModel = cartModel
+        // this.#cartNewUserModel = cartNewUserModel
         this.#cartDao = cartDao
         this.#productDao = productDao
     }
-    create = async (id) => {
+
+    addProduct = async (req) => {
         try {
-            const newCart = new this.#cartModel(id)
-            return await this.#cartDao.create(newCart.dto)
-        } catch (error) {
-            if (!error.expected)
-            error = {
-                message: 'Error creating new cart.',
-                code: 'create_new_cart_error',
-                status: 500,
+            // console.log(req.body)
+            // console.log(req.session.user)
+            let cartId = req.session.user.cart
+            let product = req.body;
+            // let cart = await this.#cartDao.getById(cartId);
+            // cart.products.push( {product: product[0]._id, quantity: 2} )
+            // cart.products.push( {product: product[1]._id, quantity: 1} )
+            // await this.#cartDao.addProduct(cartId,cart);
+            await this.#cartDao.deleteAllProducts(cartId);
+            await this.#cartDao.addProducts(cartId,product);
+            const cart = await this.#cartDao.getByIdPopulate(cartId);
+            if (!cart)
+            return {
+                status: 404,
+                result:hasJsonResult.ERROR,
+                message: 'User cart does not exist.',
+                code: 'user_cart_not_found',
+                payload:{  data : undefined}, 
+                cause: undefined,
             }
-            delete error.expected
-            throw error
+
+            let total = 0;
+            cart.products.forEach( (item)=> total+= ( item.quantity * item.product.price) );
+
+            return {
+                status: 200,
+                result:hasJsonResult.SUCCESS,
+                message: 'creating new cart.',
+                code: 'creating_new_product_in_cart',
+                payload:{  
+                    sessionId :req.session.user._id,
+                    data : cart.products,
+                    total : total,
+                }, 
+                cause: undefined,
+            }
+            
+        } catch (err) {
+            if (!err.expected)
+            err = {
+                status: 500,
+                result:hasJsonResult.ERROR,
+                message: 'Error adding product to cart.',
+                code: 'add_product_to_cart_error',
+                payload:{  data : undefined }, 
+                cause: undefined,                
+                expected: true,
+            }
+            delete err.expected
+            throw err
+        }
+    }
+
+    create = async () => {
+        try {
+            // const newCart =  new this.#cartNewUserModel()
+            return await this.#cartDao.create()
+        } catch (err) {
+            if (!err.expected)
+            err = {
+                status: 500,
+                err: {
+                    result:hasJsonResult.ERROR,
+                    message: 'Error creating new cart.',
+                    code: 'create_new_product_error',
+                    payload:{  data : { thumbnail :  config.NOTFOUND_THUMBNAIL }}, 
+                    cause: undefined,
+                }
+            }
+            delete err.expected;
+            throw err;
         }
     }
     getProducts = async (req) => {
         try {
-            const cart = await this.#cartDao.getById(req.user.id)
+            const cart = await this.#cartDao.getByIdPopulate(req.session.user.cart)
             if (!cart)
             throw {
-                message: 'User cart does not exist.',
-                code: 'user_cart_not_found',
-                status: 404,
-                expected: true,
+                err: {
+                    status: 404,
+                    result:hasJsonResult.ERROR,
+                    message: 'User cart does not exist.',
+                    code: 'user_cart_not_found',
+                    payload:{  data : undefined}, 
+                    cause: undefined,
+                }
             }
-            return cart.products
-        } catch (error) {
-            if (!error.expected)
-            error = {
+            let total = 0;
+            cart.products.forEach( (item)=> total+= ( item.quantity * item.product.price) );
+            return {
+                status: 200,
+                result:hasJsonResult.SUCCESS,
+                message: 'creating new cart.',
+                code: 'creating_new_product_in_cart',
+                payload:{  
+                    sessionId :req.session.user._id,
+                    data : cart.products,
+                    total : total,
+                }, 
+                cause: undefined,
+            } 
+        } catch (err) {
+            if (!err.expected)
+            err = {
+                status: 500,
+                result:hasJsonResult.ERROR,
                 message: 'Failed to get all products.',
                 code: 'get_all_products_error',
-                status: 500,
+                payload:{  data : undefined}, 
+                expected: true,
             }
-            delete error.expected
-            throw error
+            delete err.expected
+            throw err
         }
-    }
-    addProduct = async (req) => {
-        try {
-            const product = await this.#productDao.getById(req.body.productId)
-            if (!product)
-            throw {
-                message: 'Product not found.',
-                code: 'product_not_found',
-                status: 404,
-                expected: true,
-            }
-            return this.#cartDao.addProduct(req.user.id, product)
-        } catch (error) {
-            if (!error.expected)
-            error = {
-                message: 'Error adding product to cart.',
-                code: 'add_product_to_cart_error',
-                expected: true,
-                status: 500,
-            }
-
-            delete error.expected
-            throw error
-    }
     }
     deleteProduct = async (req) => {
         try {
-            const cart = await this.#cartDao.getById(req.user.id)
+            const cart = await this.#cartDao.getByIdPopulate(req.session.user.cart)
             if (!cart)
             throw {
+                status: 404,
+                result:hasJsonResult.ERROR,
                 message: 'User cart does not exist.',
                 code: 'user_cart_not_found',
-                status: 404,
+                payload:{  data : undefined}, 
                 expected: true,
             }
-            return await this.#cartDao.deleteProduct(req.user.id, req.params.productId)
-        } catch (error) {
-            if (!error.expected)
-            error = {
+            await this.#cartDao.deleteProduct()
+            //return await this.#cartDao.deleteProduct(req.user.id, req.params.productId)
+        } catch (err) {
+            if (!err.expected)
+            err = {
+                status: 500,
+                result:hasJsonResult.ERROR,
                 message: 'Error removing product.',
                 code: 'delete_product_by_id_error',
-                status: 500,
+                payload:{  data : undefined}, 
+                expected: true,
             }
 
-            delete error.expected
-            throw error
+            delete err.expected
+            throw err
         }
     }
+
+    // addProduct = async (req) => {
+    //     try {
+    //         const product = await this.#productDao.getById(req.body.productId)
+    //         if (!product)
+    //         throw {
+    //             message: 'Product not found.',
+    //             code: 'product_not_found',
+    //             status: 404,
+    //             expected: true,
+    //         }
+    //         return this.#cartDao.addProduct(req.user.id, product)
+    //     } catch (err) {
+    //         if (!err.expected)
+    //         err = {
+    //             message: 'Error adding product to cart.',
+    //             code: 'add_product_to_cart_error',
+    //             expected: true,
+    //             status: 500,
+    //         }
+
+    //         delete err.expected
+    //         throw err
+    // }
+    // }
+    // deleteProduct = async (req) => {
+    //     try {
+    //         const cart = await this.#cartDao.getById(req.user.id)
+    //         if (!cart)
+    //         throw {
+    //             message: 'User cart does not exist.',
+    //             code: 'user_cart_not_found',
+    //             status: 404,
+    //             expected: true,
+    //         }
+    //         return await this.#cartDao.deleteProduct(req.user.id, req.params.productId)
+    //     } catch (err) {
+    //         if (!err.expected)
+    //         err = {
+    //             message: 'Error removing product.',
+    //             code: 'delete_product_by_id_error',
+    //             status: 500,
+    //         }
+
+    //         delete err.expected
+    //         throw err
+    //     }
+    // }
 }
 
 

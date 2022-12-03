@@ -2,27 +2,22 @@ import config from '../config/config.js'
 import jwt from 'jsonwebtoken'
 
 
-const isAuthSession = (req, res, next) => {
+const isLoggedIn = (req, res, next) => {
     try{
-        //if(!req.isAuthenticated())  res.redirect('/login') 
-        //if(!req.session.authenticated )  res.redirect('/login') 
+        if(!req.session.user) { 
+            console.log('ir a login')
+            return res.status(307).redirect('/login');
+        }
+        next();
+        // return;
         
-        
-        //if(!req.session.user)   res.redirect('/login') 
-        // if(!req.session.user)   res.redirect('/login') 
-        // else    next();    
-
-        if( req.isAuthenticated() ) return next();
-        res.redirect('/login') 
-
     }
     catch(err){
         logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
+        console.log(e)
+        res.redirect('/login')        
     }        
 } 
-
-
-
 const isAuthJWT = (req, res, next) => {
     const headerAuthorization = req.headers['authorization'] || req.headers['Authorization'] || ''
     if (!headerAuthorization) {
@@ -53,4 +48,4 @@ const isAuthJWT = (req, res, next) => {
 }
 
 
-export default isAuthSession
+export default isLoggedIn

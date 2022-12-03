@@ -13,7 +13,7 @@ form.addEventListener('submit',(evt)=>{
         }
     })
     .then((res) => {
-        if (res.ok) {  return res.json(); }
+        if (res.ok || res.status == 403) {  return res.json(); }
         return Promise.reject(res); 
     })   
     .then(json=>{

@@ -48,6 +48,13 @@
 
                 "SAC_CONTACT_EMAIL":"lramire2@tulane.edu",
                 "SAC_CONTACT_EMAIL_ALIAS":"Team Coder Shop",
+
+                "SMS_ACCOUNT":"AC389f5ef1ebfae5e4997a3ae9513fab16",
+                "SMS_TOKEN":"1c10dc517e925d7f7980a2c08038bb7f",
+                "SMS_PHONE_NUMBER":"+17432025424",
+                "WHATSAPP_ACCOUNT":"AC389f5ef1ebfae5e4997a3ae9513fab16",
+                "WHATSAPP_TOKEN":"1c10dc517e925d7f7980a2c08038bb7f",
+                "WHATSAPP_PHONE_NUMBER":"+14155238886",
             }
         }
     ]

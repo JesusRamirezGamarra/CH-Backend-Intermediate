@@ -1,9 +1,24 @@
 import {Router} from 'express';
 // import services from "../daos/index.js";
-import __dirname from "../utils/directory/root.directory.js";
+// import __dirname from "../utils/directory/root.directory.js";
+import cartController from '../controllers/cart.controller.js'
+import isLoggedIn from '../middlewares/isauth.middleware.js';
+import isAdmin from '../middlewares/isadmin.middleware.js';
 
-
+const path = 'cart';
 const router = Router();
+router.post(`/${path}/`, isLoggedIn, cartController.addProduct)
+router.post(`/${path}/`, isLoggedIn, cartController.deleteProduct)
+
+
+// router.get(`/${path}/`,  isLoggedIn, cartController.getProducts)
+// router.post(`/${path}/`, isLoggedIn, cartController.addProduct)
+// router.delete(`/${path}/:productId`, isLoggedIn, cartController.deleteProduct)
+
+
+
+
+
 // router.get('/:cid/products',async(req,res)=>{
 //     let cid = req.params.cid
 //     if(isNaN(cid)) return res.status(400).send({error:"El valor no es numerico"})

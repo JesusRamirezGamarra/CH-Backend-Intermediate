@@ -20,25 +20,11 @@ form.addEventListener('submit',(evt)=>{
             window.location.replace('/');
         }       
         else if(json.result=="error"){
-            // document.getElementById("idMessage").innerHTML =
-            // ( json.payload.data == undefined )?  `${json.message} :  ${json.cause} ` :  `${json.message} :  ${json.payload.data.map( data => data.message + ' in ' +  data.parameter + ',  ' + data.value + ' not valid. ' )} `;
             if ( json.payload.data == undefined )
                 document.getElementById("idMessage").innerHTML = `<span>${json.message} :  ${json.cause}</span>`
             else{
-                // document.getElementById("idMessage").innerHTML = `<div><b>${json.message} :</b> </div>${json.payload.data.map( data => '<div>'+ data.message + ' not valid. </div>' )}`;
-                
-                // document.getElementById("idMessage").innerHTML = `<div><b><u>${json.message}</u> : </b> </div>
-                //     ${json.payload.data.map( 
-                //         data => '<div>'+ 
-                //             data.message + ' in ' +  data.parameter + '.  ' + 
-                //             ( data.parameter == 'Password' || data.parameter == 'repassword' )? '' : data.value +' not valid.' +
-                //             '</div>' 
-                //     ).join('')}`;
-
                 document.getElementById("idMessage").innerHTML =  `<div><b><u>${json.message}</u> : </b> </div>${json.payload.data.map( data => '<div>'+ data.message + ' in ' +  data.parameter + '.' + data.parameter + '": ' + data.value +' not valid.'+'</div>' ).join('')}`;
             } 
-                
-
         }
     }) 
     .catch((res) => {

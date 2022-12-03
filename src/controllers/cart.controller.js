@@ -1,5 +1,5 @@
-import cartService from '../Services/cart.service.js'
-
+import cartService from '../services/cart.service.js'
+import config, {hasJsonResult} from '../config/config.js'
 
 class CartController {
     #cartService
@@ -7,36 +7,47 @@ class CartController {
         this.#cartService = cartService
     }
 
-    create = async (req, res) => {
-        try {
-            const cart = await this.#cartService.create(req)
-            res.status(201).json(cart)
-        } catch (error) {
-            res.status(error.status).json(error)
-        }
-    }
+    // create = async (req, res) => {
+    //     try {
+    //         //const cart = await this.#cartService.create(req)
+    //         res.status(201).json(cart)
+    //     } catch (err) {
+    //         res.status(err.status).json(err)
+    //     }
+    // }
     getProducts = async (req, res) => {
         try {
             const cart = await this.#cartService.getProducts(req)
-            res.status(201).json(cart)
-        } catch (error) {
-            res.status(error.status).json(error)
+            res.status(201).render('checkout',{ products : cart  , user: req.session.user }) ;
+            //res.status(201).json(cart)
+        } catch (err) {
+            res.status(err.status).json(err)
         }
     }
     addProduct = async (req, res) => {
         try {
             const updatedProduct = await this.#cartService.addProduct(req)
-            res.status(201).json(updatedProduct)
-        } catch (error) {
-            res.status(error.status).json(error)
+            res.status(201).send(updatedProduct)
+        } catch (err) {
+            res.status(err.status).json(err.err)
         }
-    }
+    }    
+    // addProduct = async (req, res) => {
+    //     try {
+    //         const updatedProduct = await this.#cartService.addProduct(req)
+    //         res.status(201).json(updatedProduct)
+    //     } catch (err) {
+    //         res.status(err.status).json(err)
+    //     }
+    // }
     deleteProduct = async (req, res) => {
         try {
-            await this.#cartService.deleteProduct(req)
-            res.status(204).json()
-        } catch (error) {
-            res.status(error.status).json(error)
+            const cart = await this.#cartService.deleteProduct(req)
+            res.status(201).render('checkout',{ products : cart  , user: req.session.user }) ;
+            //res.status(204).json()
+
+        } catch (err) {
+            res.status(err.status).json(err)
         }
     }
 }

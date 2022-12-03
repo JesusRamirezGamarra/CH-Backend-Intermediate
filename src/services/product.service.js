@@ -1,9 +1,9 @@
 // D:\APP\Backend\CH-eCommerce-Intermediate\src\models\product.model.js
 //import productModel from '../models/product-model.js'
-import ProductModel from '../models/product.model.js';
+import ProductModel from '../models/product/product.model.js';
 import { v4 as uuidv4 } from 'uuid';
 //import getProductModel from '../models/get-product-model.js'
-import GetProductModel from '../models/get.product.model.js';
+import GetProductModel from '../models/product/get.product.model.js';
 // import { productsDao } from '../daos/product/index.js';
 import { productDao } from '../daos/product/index.js';
 import config, {hasJsonResult} from '../Config/config.js'
@@ -28,7 +28,7 @@ class ProductService {
             const newProductDto = newProduct.dto;
             const product =  await this.#productDao.create({ ...newProductDto, sku: uuid });
             const productDto = new this.#getProductModel(product)
-            return productDto.oneProductDto
+            return productDto.oneProductDto;            
         } 
         catch (err) {
             if (!err.expected)
@@ -50,7 +50,8 @@ class ProductService {
         try {
             // let params = req.params.term;
             let params = {name: eval(`/${req.params.term}/i`)};
-            let projection =  { projection: { _id: 0 } } ;
+            // let projection =  { projection: { _id: 0 } } ;
+            let projection =  { projection: { _id: 1 } } ;
             const allProducts = await this.#productDao.getSearch(params,projection  );
             // let field = eval(`name`);
             // let params =  eval(`/${req.params.term}/i`);
@@ -156,9 +157,7 @@ class ProductService {
                     cause: undefined ,    
                 }
             }
-            // const updateproduct = new this.#newProductModel(req.body);
             const product =  await this.#productDao.updateById(currentproduct._id, req.body)
-            console.log(  product)
             const productDto = new this.#getProductModel(product)
             return productDto.oneProductDto
         } 

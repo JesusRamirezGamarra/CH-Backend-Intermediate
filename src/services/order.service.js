@@ -1,4 +1,4 @@
-import orderModel from '../models/order-model.js'
+import OrderModel from '../models/order/order.model.js'
 import { cartDao } from '../daos/cart/index.js'
 import { ordersDao } from '../daos/order/index.js'
 import { transporter } from '../senders/email/gmail.js'
@@ -86,5 +86,5 @@ class OrderService {
 }
 
 
-const orderService = new OrderService(orderModel, cartDao, ordersDao, idGenerator)
+const orderService = new OrderService(OrderModel, cartDao, ordersDao, idGenerator)
 export default orderService

@@ -88,6 +88,18 @@ export default {
         SECRET:     process.env.JWT_SECRET,
         COOKIE:     process.env.JWT_COOKIE
     },
+    MESSAGE:{
+        SMS:{
+            ACCOUNT_SID:    process.env.SMS_ACCOUNT,
+            AUTH_TOKEN:     process.env.SMS_TOKEN,
+            PHONE_NUMBER:   process.env.SMS_PHONE_NUMBER
+        },
+        WHATSAPP:{
+            ACCOUNT_SID:    process.env.WHATSAPP_ACCOUNT,
+            AUTH_TOKEN:     process.env.WHATSAPP_TOKEN,
+            PHONE_NUMBER:   process.env.WHATSAPP_PHONE_NUMBER
+        }
+    },
     NODEMAILER:{
         SERVICE:    process.env.NODEMAILER_SERVICE,
         HOST:       process.env.NODEMAILER_HOST,

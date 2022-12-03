@@ -10,8 +10,16 @@ class UserController {
         try {
             const user = await this.#userService.create(req)
             res.status(201).json(user)
-        } catch (error) {
-            res.status(error.status).json(error)
+        } catch (err) {
+            res.status(err.status).json(err.err)
+        }
+    }
+    updateById = async (req, res) => {
+        try {
+            const updatedUser = await this.#userService.updateById(req);
+            res.status(201).json(updatedUser);
+        } catch (err) {
+            res.status(err.status).json(err.err);
         }
     }
 }
