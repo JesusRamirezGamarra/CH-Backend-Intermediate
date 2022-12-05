@@ -9,7 +9,7 @@ import cartModel from '../models/cart/cart.model.js'
 import { cartDao } from '../daos/cart/index.js'
 import { productDao } from '../daos/product/index.js'
 
-import config, {hasJsonResult} from '../Config/config.js'
+import config, {hasJsonResult} from '../config/config.js'
 
 
 class CartService {
