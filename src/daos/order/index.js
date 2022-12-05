@@ -1,12 +1,12 @@
 import config,{hasJsonResult} from '../../config/config.js'
 
 
-let ordersDao
+let orderDao
 switch (config.PERSISTENCE) {
     case 'mongodb':
         const { default: ordersDaoMongodb } = await import('./mongodb/order.mongodb.dao.js')
         const { default: mongooseOrderModel } = await import('./mongodb/order.mongoose.model.js')
-        ordersDao = new ordersDaoMongodb(mongooseOrderModel)
+        orderDao = new ordersDaoMongodb(mongooseOrderModel)
     break
     default:
         throw {
@@ -21,4 +21,4 @@ switch (config.PERSISTENCE) {
 }
 
 
-export { ordersDao }
+export { orderDao }

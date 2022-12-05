@@ -1,10 +1,13 @@
 import cartService from '../services/cart.service.js'
+import orderService from '../services/order.service.js';
 import config, {hasJsonResult} from '../config/config.js'
 
 class CartController {
     #cartService
-    constructor(cartService) {
+    #orderService
+    constructor(cartService,orderService) {
         this.#cartService = cartService
+        this.#orderService = orderService
     }
 
     // create = async (req, res) => {
@@ -24,14 +27,31 @@ class CartController {
             res.status(err.status).json(err)
         }
     }
-    addProduct = async (req, res) => {
+    addProducts = async (req, res) => {
         try {
-            const updatedProduct = await this.#cartService.addProduct(req)
+            const updatedProduct = await this.#cartService.addProducts(req)
             res.status(201).send(updatedProduct)
         } catch (err) {
             res.status(err.status).json(err.err)
         }
-    }    
+    }
+    addProductsToOrder = async (req, res) => {
+        try {
+            const cart = await this.#cartService.addProductsToOrder(req)
+            const order =  {
+                user : req.session.user,
+                products : cart.payload.data
+            }
+            const updatedOrder = await this.#orderService.create(order)
+
+
+            res.status(201).send(updatedOrder)
+        } catch (err) {
+            res.status(err.status).json(err.err)
+        }
+    } 
+    
+    
     // addProduct = async (req, res) => {
     //     try {
     //         const updatedProduct = await this.#cartService.addProduct(req)
@@ -43,7 +63,8 @@ class CartController {
     deleteProduct = async (req, res) => {
         try {
             const cart = await this.#cartService.deleteProduct(req)
-            res.status(201).render('checkout',{ products : cart  , user: req.session.user }) ;
+            res.status(200).send(cart);
+            //res.status(201).render('checkout',{ products : cart  , user: req.session.user }) ;
             //res.status(204).json()
 
         } catch (err) {
@@ -53,5 +74,5 @@ class CartController {
 }
 
 
-const cartController = new CartController(cartService)
+const cartController = new CartController(cartService,orderService)
 export default cartController

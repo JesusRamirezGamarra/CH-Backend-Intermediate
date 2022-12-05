@@ -1,13 +1,16 @@
 
 import { Router } from 'express'
 // import orderController from '../Controllers/order.controller.js'
-import cartController from '../controllers/cart.controller.js';
+//import cartController from '../controllers/cart.controller.js';
+import orderController from '../controllers/order.controller.js';
 import isLoggedIn from '../middlewares/isauth.middleware.js';
 
 const path = 'order';
 const router = new Router()
 
-router.get(`/${path}/checkout`, isLoggedIn, cartController.getProducts );
+router.post(`/${path}/checkout`, isLoggedIn, orderController.create );
+
+
 // (req, res) => {   
     //res.render('checkout',{ data : cartController.getProducts  }) ;
     // res.render('checkout', { user : req.session.user})  

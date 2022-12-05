@@ -4,21 +4,33 @@ class OrdersDaoMongodb {
         this.#mongooseOrderModel = mongooseOrderModel
     }
 
-    create = async (order) => {
+
+    create = async (cart) => {
         try {
-            return await this.#mongooseOrderModel.create(order)
-        } catch (error) {
-            console.log({ error })
-            throw error
+            // cart.products.forEach( (item)=> delete item.stock );
+            
+            return await this.#mongooseOrderModel.create(cart)
+        } catch (err) {
+            console.log({ err })
+            throw err
         }
     }
+
+    // create = async (order) => {
+    //     try {
+    //         return await this.#mongooseOrderModel.create(order)
+    //     } catch (err) {
+    //         console.log({ err })
+    //         throw err
+    //     }
+    // }
     getAll = async (userId) => {
         try {
             console.log({ userId })
             return await this.#mongooseOrderModel.find({ userId })
-        } catch (error) {
-            console.log({ error })
-            throw error
+        } catch (err) {
+            console.log({ err })
+            throw err
         }
     }
 }

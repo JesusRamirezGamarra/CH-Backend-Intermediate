@@ -2,7 +2,7 @@ import config from '../../../config/config.js'
 import { ___dirname }  from '../../../utils/directory/root.directory.js'
 
 export const newUserEmailTemplate = (user_data) => {
-console.log(___dirname)
+// console.log(___dirname)
 
 
     const mailOptions = {

@@ -55,11 +55,18 @@ class CartsDaoMongodb {
 	// };
 	deleteProduct = async (cartId, productId) => {
 		try {
-			return await this.#mongooseCartModel.findOneAndUpdate({ id: cartId }, { $pull: { products: { id: productId } } });
+			return await this.#mongooseCartModel.findOneAndUpdate({ id: cartId }, { $pull: { products: { product: productId } } });
 		} catch (err) {
 			throw err;
 		}
-	};
+	};	
+	// deleteProduct = async (cartId, productId) => {
+	// 	try {
+	// 		return await this.#mongooseCartModel.findOneAndUpdate({ id: cartId }, { $pull: { products: { id: productId } } });
+	// 	} catch (err) {
+	// 		throw err;
+	// 	}
+	// };
 	deleteAllProducts = async (cartId) => {
 		try {
 			return await this.#mongooseCartModel.findOneAndUpdate({ id: cartId }, { $set: { products: [] } });

@@ -129,6 +129,10 @@ export default {
             ALIAS:  process.env.ADMIN_CONTACT_EMAIL_ALIAS            
         }
     },
+    CONTACT_PHONE:{
+        SAC : process.env.SAC_CONTACT_PHONE,
+        ADMIN : process.env.ADMIN_CONTACT_PHONE
+    },
     TOKEN_EXP_TIME:     process.env.TOKEN_EXP_TIME,
     PERSISTENCE:        process.env.PERSISTENCE,
     NOTFOUND_THUMBNAIL: process.env.NOTFOUND_THUMBNAIL, 

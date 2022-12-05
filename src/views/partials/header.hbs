@@ -478,7 +478,7 @@
 
 
     {{#if user }}
-        <div class="flex justify-between pl-5">                    
+        <div class="flex justify-between pl-5 pr-5">                    
             <figcaption class="font-medium">
                 <div class="text-center">
                     <a href="/profile">
@@ -490,7 +490,7 @@
                 {{user.first_name}} {{user.last_name}}
             </figcaption>    
         </div>   
-        <div class="flex justify-between pl-5">                    
+        <div class="flex justify-between pl-5 pr-5">                    
             <figcaption class="font-medium">                                     
                 <div  >
                     <a href="/logout">
@@ -500,7 +500,7 @@
             </figcaption>    
         </div> 
     {{ else }}    
-        <div class="flex justify-between pl-5">                    
+        <div class="flex justify-between pl-5 pr-5">                    
             <figcaption class="font-medium">                                     
                 <div  >
                     <a href="/login">
@@ -511,7 +511,7 @@
         </div>   
     {{/if }}
     <div>
-        <div class="relative  rounded-lg dark:bg-indigo-900/80 dark:border-0">
+        <div class="relative  rounded-lg ">
             <div class="static p-4 flex flex-col justify-between dark:border-0 cursor-pointer">
                 <p class="text-indigo-700 dark:text-indigo-200">
                     <img onmouseover="showCart(this)" class="w-10 h-10  mx-auto" src="/img/cart.png"  alt="Cart" > 

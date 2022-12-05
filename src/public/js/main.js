@@ -129,10 +129,8 @@ loadHtml = () =>{
 clearHtml = () =>containerBuyCart.innerHTML = '';
 
 let checkOut = document.getElementById('checkOutForm')
-
 const handleCheckOutSubmit = (evt,form,route) =>{    
     evt.preventDefault()
-    //let obj = buyThings.map( product => (   { product: `ObjectId("${product. productId}")`, quantity: product.quantity }  ));
     let obj = buyThings.map( product => (   { product: product. productId, quantity: product.quantity }  ));
     fetch(route,{
         redirect: 'manual',
@@ -148,17 +146,7 @@ const handleCheckOutSubmit = (evt,form,route) =>{
     }) 
     .then(json=>{
         if(json.result==="success"){
-            // console.log("success");
-            // sessionStorage.clear();
-            // let data =  JSON.stringify({data: json.payload.data.products});
-            // sessionStorage.setItem(json.payload.data.sessionId, data);
-            // data = JSON.parse(sessionStorage.getItem(json.payload.data.sessionId));
-            // let data =  JSON.stringify({data: buyThings});
-            // sessionStorage.setItem('CODERSHOP', buyThings);
-            // data = JSON.parse(sessionStorage.getItem('CODERSHOP'));
-            
-            
-            window.location.replace('api/order/checkout');
+            window.location.replace('/api/cart/checkout');
         }
         else if(json.result=="error"){
             console.log("error");
@@ -174,12 +162,43 @@ const handleCheckOutSubmit = (evt,form,route) =>{
 };
 checkOut.addEventListener('submit',(e)=>handleCheckOutSubmit(e,e.target,'/api/cart/'))
 
+readTheContentOnly = (infoProduct) =>{
+    totalCard = parseFloat(totalCard) + parseFloat(infoProduct.price);
+    totalCard = totalCard.toFixed(2);
+    const exist = buyThings.some(product => product.productId === infoProduct.productId);
+    if (exist) {
+        const pro = buyThings.map(product => {
+            if (product.productId === infoProduct.productId) {
+                return product;
+            } else {
+                return product
+            }
+        });
+        buyThings = [...pro];
+    } else {
+        buyThings = [...buyThings,infoProduct]
+        countProduct++;
+    }
+    loadHtml();
+}
+
+save = ( productid , amount ) =>{    
+    const pro = buyThings.map(product => {
+        if (product.productId === productid) {
+            product.quantity = amount;
+            return product;
+        } else {
+            return product;
+        }
+    });
+    buyThings = [...pro];
+}
+
 load = () => {
     if (buyThings.length > 0){
-        loadHtml();
         countProduct = buyThings.length
         buyThings.forEach((item) =>{
-            readTheContent(item);
+            readTheContentOnly(item);
         })
     }
 }

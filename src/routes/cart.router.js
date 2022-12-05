@@ -7,8 +7,10 @@ import isAdmin from '../middlewares/isadmin.middleware.js';
 
 const path = 'cart';
 const router = Router();
-router.post(`/${path}/`, isLoggedIn, cartController.addProduct)
-router.post(`/${path}/`, isLoggedIn, cartController.deleteProduct)
+router.get(`/${path}/checkout`, isLoggedIn, cartController.getProducts );
+router.post(`/${path}/`, isLoggedIn, cartController.addProducts);
+router.post(`/${path}/addproductstoorder`, isLoggedIn, cartController.addProductsToOrder);
+router.delete(`/${path}/`, isLoggedIn, cartController.deleteProduct);
 
 
 // router.get(`/${path}/`,  isLoggedIn, cartController.getProducts)

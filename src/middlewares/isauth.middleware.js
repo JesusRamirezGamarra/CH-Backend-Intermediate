@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 const isLoggedIn = (req, res, next) => {
     try{
         if(!req.session.user) { 
-            console.log('ir a login')
+            // console.log('ir a login')
             return res.status(307).redirect('/login');
         }
         next();
@@ -14,7 +14,7 @@ const isLoggedIn = (req, res, next) => {
     }
     catch(err){
         logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
-        console.log(e)
+        // console.log(e)
         res.redirect('/login')        
     }        
 } 
