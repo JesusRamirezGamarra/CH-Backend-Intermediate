@@ -1,4 +1,4 @@
-import orderService from '../Services/order.service.js'
+import orderService from '../services/order.service.js'
 
 
 class OrderController {

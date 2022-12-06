@@ -13,7 +13,7 @@
                 "<node_internals>/**"                
             ],
             // "program": "${file}/src/app.js",
-            "program": "${workspaceFolder}/src/app2.js",
+            "program": "${workspaceFolder}/src/app.js",
             "env":{
                 // "DEBUG":"true",
                 // mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
@@ -50,10 +50,10 @@
                 "SAC_CONTACT_EMAIL_ALIAS":"Team Coder Shop",
 
                 "SMS_ACCOUNT":"AC389f5ef1ebfae5e4997a3ae9513fab16",
-                "SMS_TOKEN":"9d60f7cd6551fb5fee89794f69c73ef9",
+                "SMS_TOKEN":"991e0d874f387acbd88d4d6d17e7134e",
                 "SMS_PHONE_NUMBER":"+17432025424",
                 "WHATSAPP_ACCOUNT":"AC389f5ef1ebfae5e4997a3ae9513fab16",
-                "WHATSAPP_TOKEN":"9d60f7cd6551fb5fee89794f69c73ef9",
+                "WHATSAPP_TOKEN":"991e0d874f387acbd88d4d6d17e7134e",
                 "WHATSAPP_PHONE_NUMBER":"+14155238886",
                 "ADMIN_CONTACT_PHONE" :"+51978111558",
             }
