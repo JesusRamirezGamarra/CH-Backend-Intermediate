@@ -26,7 +26,7 @@ router.get('/admin',async(req,res)=>{
     if(!req.session.user) return res.redirect('/login')
         let user = req.session.user
 
-    res.render("HomeAdmin",
+    res.render("homeAdmin",
                 {user:user}
     );
 })    

@@ -19,7 +19,7 @@ class ProductController {
         try {
             const products = await this.#productService.getSearch(req);
             // const products = await this.#productService.getAll();
-            res.render("Home", { data: products.payload.data, user : req.session.user});
+            res.render("home", { data: products.payload.data, user : req.session.user});
         } catch (err) {
             res.status(err.status).json(err.err);
         }
@@ -27,8 +27,7 @@ class ProductController {
     getAll = async (req, res) => {
         try {
             const products = await this.#productService.getAll();
-            // res.render("Home", { data: null, user : req.session.user});
-            res.render("Home", { data: products.payload.data, user : req.session.user , isAdmin : ( req.session.user && req.session.user.role === 'admin') ? true : false });
+            res.render("home", { data: products.payload.data, user : req.session.user , isAdmin : ( req.session.user && req.session.user.role === 'admin') ? true : false });
         } catch (err) {
             res.status(err.status).json(err.err);
         }
