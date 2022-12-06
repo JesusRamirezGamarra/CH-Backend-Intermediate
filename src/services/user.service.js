@@ -1,13 +1,13 @@
-import tokenGenerator from '../utils/generator/token.generator.js'
-import idGenerator from '../utils/generator/id.generator.js'
-import { makeEncryptPass } from '../utils/encript/string.encript.js'
-import UserModel from '../models/user/user-login.model.js'
+import tokenGenerator from '../utils/generator/token.generator.js';
+import idGenerator from '../utils/generator/id.generator.js';
+ import { makeEncryptPass } from '../utils/encript/string.encript.js';
+import UserModel from '../models/user/user-login.model.js';
 import UserProfileModel from '../models/user/user-profile.model.js';
-import cartService from './cart.service.js'
-import { userDao } from '../daos/user/index.js'
-import {newUserEmailTemplate} from '../senders/email/template/newuser-template.email.js'
+import cartService from './cart.service.js';
+import { userDao } from '../daos/user/index.js';
+import {newUserEmailTemplate} from '../senders/email/template/newuser-template.email.js';
 // import { body } from 'express-validator';
-import {hasJsonResult} from '../config/config.js'
+import {hasJsonResult} from '../config/config.js';
 
 
 class UserService {
