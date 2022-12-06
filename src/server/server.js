@@ -177,9 +177,12 @@ export default class Server{
     }
 
     engines() {
-        const layoutDirPath   = ___dirname + "\\views\\layouts";
-        const defaultLayerPth = ___dirname + "\\views\\layouts\\main.hbs";
-        const partialDirPath  = ___dirname + "\\views\\partials";
+        // const layoutDirPath   = ___dirname + "\\views\\layouts";
+        // const defaultLayerPth = ___dirname + "\\views\\layouts\\main.hbs";
+        // const partialDirPath  = ___dirname + "\\views\\partials";
+        const layoutDirPath   = ___dirname + "/views/layouts";
+        const defaultLayerPth = ___dirname + "/views/layouts/main.hbs";
+        const partialDirPath  = ___dirname + "/views/partials";        
         this.app.engine('.hbs',handlebars.engine({
             extname : ".hbs",
             layoutsDir: layoutDirPath,
@@ -190,7 +193,7 @@ export default class Server{
             }
         }));
         this.app.set('view engine','.hbs');
-        this.app.set('views',___dirname+'\\views')        
+        this.app.set('views',___dirname+'/views')        
     }
     
     listen() {
