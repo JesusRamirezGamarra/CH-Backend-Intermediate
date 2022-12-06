@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import GetProductModel from '../models/product/get.product.model.js';
 // import { productsDao } from '../daos/product/index.js';
 import { productDao } from '../daos/product/index.js';
-import config, {hasJsonResult} from '../Config/config.js'
+import config, {hasJsonResult} from '../config/config.js'
 // import {hasJsonMessage} from '../config/config.js'
 
 

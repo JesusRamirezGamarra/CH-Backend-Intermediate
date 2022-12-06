@@ -6,7 +6,7 @@ import { newOrderEmailTemplate } from '../senders/email/template/neworder-templa
 import { transporterSMS } from '../senders/message/sms.message.js'
 import { transporterWhatsapp } from '../senders/whatsapp/whatsapp.message.js'
 import idGenerator from '../utils/generator/id.generator.js'
-import config, {hasJsonResult} from '../Config/config.js'
+import config, {hasJsonResult} from '../config/config.js'
 
 class OrderService {
     #orderModel

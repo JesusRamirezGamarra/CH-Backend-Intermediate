@@ -7,7 +7,7 @@ import cartService from './cart.service.js'
 import { userDao } from '../daos/user/index.js'
 import {newUserEmailTemplate} from '../senders/email/template/newuser-template.email.js'
 // import { body } from 'express-validator';
-import {hasJsonResult} from '../Config/config.js'
+import {hasJsonResult} from '../config/config.js'
 
 
 class UserService {

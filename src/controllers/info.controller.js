@@ -1,4 +1,4 @@
-import serverInfo from '../Config/server.info.js'
+import serverInfo from '../config/server.info.js'
 
 
 class InfoController {
