@@ -15,7 +15,6 @@ class OrderController {
         res.status(err.status).json(err)
         }
     }
-
     // create = async (req, res) => {
     //     try {
     //     const order = await this.#orderService.create(req)
