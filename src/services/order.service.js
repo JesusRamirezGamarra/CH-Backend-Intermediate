@@ -36,7 +36,15 @@ class OrderService {
             await this.#sendNotificationEmail(newOrder)
             await this.#sendNotificationSMS(newOrder)
             await this.#sendNotificationWhatsapp(newOrder)
-            return newOrder
+            return {
+                status: 200,
+                result:hasJsonResult.SUCCESS,
+                message: 'creating order.',
+                code: 'create_order',                
+                payload:{  data : newOrder}, 
+                cause: undefined,                
+                expected: true,
+            }
         } 
         catch (err) {
             if (!err.expected)

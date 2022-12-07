@@ -164,7 +164,7 @@ save = ( productid , amount ) =>{
 }
 
 load = () => {
-    if (buyThings.length > 0){
+    if (buyThings  && buyThings.length > 0){
         countProduct = buyThings.length
         buyThings.forEach((item) =>{
             readTheContentOnly(item);
