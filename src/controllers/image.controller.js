@@ -1,3 +1,6 @@
+import moment from 'moment';
+import { logger } from '../utils/logger/isLogger.js';
+
 class ImageController {
     constructor() {}
 
@@ -8,8 +11,9 @@ upload = async (req, res) => {
                 code: 'upload_success',
                 public_url: `http://localhost:${req.socket.localPort}/images/${req.file.filename}`,
             })
-        } catch (error) {
-            res.status(error.status).json(error)
+        } catch (err) {
+            logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
+            res.status(err.status).json(err)
         }
     }
 }

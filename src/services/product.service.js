@@ -48,28 +48,13 @@ class ProductService {
     }
     getSearch = async (req) => {
         try {
-            // let params = req.params.term;
             let params = {name: eval(`/${req.params.term}/i`)};
-            // let projection =  { projection: { _id: 0 } } ;
             let projection =  { projection: { _id: 1 } } ;
             const allProducts = await this.#productDao.getSearch(params,projection  );
-            // let field = eval(`name`);
-            // let params =  eval(`/${req.params.term}/i`);
-            // let options = 'i' 
-            // let projection =  { projection: { _id: 0 } } ;
-            // // console.log(field)
-            // console.log(params)
-            // console.log(options)
-            // console.log(projection)
-            // const allProducts = await this.#productDao.getRegex(params,options,projection  );
-            // const allProducts = await this.#productDao.getSearch({name: param});
-            // const allProducts = await this.#productDao.getSearch('/'+ term + '/i')
-            // const allProducts = await this.#productDao.getSearch( term )
             const products = new this.#getProductModel(allProducts)
             return products.allProductsDto
         } 
         catch (err) {
-            console.log(err)
             if (!err.expected)
             err = {
                 status: 500,        

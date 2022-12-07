@@ -9,16 +9,6 @@ class ProductsDaoMongodb {
 			return await this.#mongooseProductModel.create(newProduct);
 		} catch (err) { throw err; }
 	};
-	// getRegex = async (params,options,projection) => {
-	// 	try {
-	// 			// console.log(field)
-	// 			console.log(params)
-	// 			console.log(options)
-	// 			console.log(projection)
-
-	// 		return await this.#mongooseProductModel.find({ name: { $regex: params, $options: 'i' },projection }).lean();
-	// 	} catch (err) { throw err; }
-	// };		
 	getSearch = async (params,projection) => {
 		try {
 			return await this.#mongooseProductModel.find(params,projection ).lean();

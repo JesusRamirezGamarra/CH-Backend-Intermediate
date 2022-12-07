@@ -1,11 +1,6 @@
-// const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
 let addProductForm = document.getElementById('addProductForm')
 const handleAddProductSubmit = (evt,form,route) =>{
     evt.preventDefault();
-    // document.forms.updateProductForm.elements.name.disabled = true;
-    // document.forms.updateProductForm.elements.description.disabled = true;
-    // document.forms.updateProductForm.elements.price.disabled = true;
-    // document.forms.updateProductForm.elements.stock.disabled = true;
     let formData = new FormData(form);
     let obj = {};
     formData.forEach((value,key)=>obj[key]=value);
@@ -26,7 +21,6 @@ const handleAddProductSubmit = (evt,form,route) =>{
     })    
     .then(json=>{
         if(json.result==="success"){
-            // addProductForm.reset();
             document.forms.addProductForm.elements.name.value = json.payload.data.name;
             document.forms.addProductForm.elements.description.value = json.payload.data.description;
             document.forms.addProductForm.elements.price.value = json.payload.data.price;
@@ -40,7 +34,6 @@ const handleAddProductSubmit = (evt,form,route) =>{
         } 
     })
     .catch((res) => {
-        // console.log(response.status, response.statusText);
         res.json()
         .then( json  => {
             document.getElementById("idMessageAddProduct").innerHTML = `try again, if the error persists contact support`;            

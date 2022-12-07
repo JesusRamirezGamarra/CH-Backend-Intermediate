@@ -65,7 +65,8 @@ checkout = () =>{
     })   
     .then(json=>{
         if(json.result==="success"){
-            //window.location.replace('/api/cart/checkout');
+            sessionStorage.set('CODERSHOP',[]) 
+            window.location.replace('/api/cart/checkout');
         }       
         else if(json.result=="error"){
             document.getElementById("idMessage").innerHTML = `<span>${json.message} `

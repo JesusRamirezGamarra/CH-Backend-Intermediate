@@ -7,19 +7,8 @@ import productController from '../controllers/product.controller.js';
 
 const path = 'product';
 const router = Router();
-router.get(`/${path}/search/:term`,productController.getSearch)
-// router.get('/',async(req,res)=>{
-//     let products= await services.productService.getAll()
-//     res.send(products)
-// })
+router.get(`/${path}/search/:term`,productController.getSearch) 
 router.get(`/${path}/`,productController.getAll)
-// router.get('/:pid',async(req,res)=>{
-//     let number = req.params.pid
-//     let data = await services.productService.getById(number)
-//     console.log({data:data})
-//     res.send({status:"success",data:data})
-//     // res.send({status:"success", message:"Product Added"})
-// })
 router.get(`/${path}/:id`,isAdmin, productController.getById);
 
 // router.post('/',isAdmin,async(req,res)=>{

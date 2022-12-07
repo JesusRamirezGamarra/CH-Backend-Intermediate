@@ -19,58 +19,6 @@ class OrderService {
         this.#orderDao = orderDao
         this.#idGenerator = idGenerator
     }
-
-    // create = async (req) => {
-    //     try {
-    //         const userId = req.user.id
-    //         const userCart = await this.#cartDao.getById(userId)
-    //         const orderModel = new this.#orderModel(this.#idGenerator, req.user, userCart.products)
-    //         const orderDto = orderModel.dto
-    //         console.log({ orderDto })
-    //         const newOrder = await this.#ordersDao.create(orderDto)
-    //         if (!newOrder)
-    //             throw {
-    //             message: 'Error creating order.',
-    //             code: 'create_order_error',
-    //             status: 500,
-    //             expected: true,
-    //             }
-    //         await this.#cartDao.deleteAllProducts(userId)
-    //         await this.#sendNotificationEmail(orderDto)
-    //         return newOrder
-    //     } 
-    //     catch (error) {
-    //         console.log({ error })
-    //         if (!error.expected)
-    //             error = {
-    //             message: 'Error creating order.',
-    //             code: 'create_order_error',
-    //             status: 500,
-    //             }
-
-    //         delete error.expected
-    //         throw error
-    //     }
-    // }
-    // getAll = async (req) => {
-    //     try {
-    //         console.log('req', req.user)
-    //         return await this.#ordersDao.getAll(req.user.id)
-    //     } 
-    //     catch (error) {
-    //         console.log({ error })
-    //         if (!error.expected)
-    //             error = {
-    //             message: 'Failed to get all products.',
-    //             code: 'get_all_products_error',
-    //             status: 500,
-    //             }
-    //         delete error.expected
-    //         throw error
-    //     }
-    // }
-
-    // create = async (req, res) => {
     create = async (order ) => {        
         try {
             const newOrder =await this.#orderDao.create(order)
@@ -84,33 +32,11 @@ class OrderService {
                 cause: undefined,                
                 expected: true,
             }
-            //await this.#cartDao.deleteAllProducts(cartId);
+            await this.#cartDao.deleteAllProducts(order._id);
             await this.#sendNotificationEmail(newOrder)
-            //await this.#sendNotificationSMS(newOrder)
+            await this.#sendNotificationSMS(newOrder)
             await this.#sendNotificationWhatsapp(newOrder)
             return newOrder
-
-            
-            //const userId = req.user.id;
-            // const userCart = await this.#cartDao.getById(userId)
-            // const orderModel = new this.#orderModel(this.#idGenerator, req.user, userCart.products)
-            // const orderDto = orderModel.dto
-            // console.log({ orderDto })
-            // const newOrder = await this.#ordersDao.create(orderDto)
-            // if (!newOrder)
-            //     throw {
-            //     message: 'Error creating order.',
-            //     code: 'create_order_error',
-            //     status: 500,
-            //     expected: true,
-            //     }
-            // await this.#cartDao.deleteAllProducts(userId)
-            // await this.#sendNotificationEmail(orderDto)
-            // return newOrder
-
-
-            // await this.#sendNotificationEmail(orderDto)
-
         } 
         catch (err) {
             if (!err.expected)
@@ -193,5 +119,3 @@ class OrderService {
 
 const orderService = new OrderService(OrderModel, cartDao, orderDao, idGenerator)
 export default orderService
-// const orderService = new OrderService()
-// export default orderService

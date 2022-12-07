@@ -1,16 +1,13 @@
 import cluster from 'cluster'
 import os from 'os'
 import config from './config/config.js';
-// import app from './server/express.server.js';
-// import { initDB_Event } from './services/connectmongodb.js'
-
+import moment from 'moment';
+import { logger } from './utils/logger/isLogger.js';
 
 import Server from "./server/server.js";
 
 // import { Server as HttpServer } from 'http'
 // import { Server as IOServer } from 'socket.io'
-
-
 
 const numCPUs = os.cpus().length;
 if(config.INIT.IS_CLUSTER && cluster.isPrimary){
@@ -19,7 +16,6 @@ if(config.INIT.IS_CLUSTER && cluster.isPrimary){
         cluster.fork()
     }
     cluster.on('exit', (worker) => {
-        // console.log(`Worker ${worker.process.pid} died at ${Date()}`);
         logger.log('info', `Worker ${worker.process.pid} died ${new Date().toLocaleString()}`);
         cluster.fork();
     });

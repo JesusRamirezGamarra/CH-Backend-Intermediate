@@ -11,25 +11,13 @@ class OrdersDaoMongodb {
             
             return await this.#mongooseOrderModel.create(cart)
         } catch (err) {
-            console.log({ err })
             throw err
         }
     }
-
-    // create = async (order) => {
-    //     try {
-    //         return await this.#mongooseOrderModel.create(order)
-    //     } catch (err) {
-    //         console.log({ err })
-    //         throw err
-    //     }
-    // }
     getAll = async (userId) => {
         try {
-            console.log({ userId })
             return await this.#mongooseOrderModel.find({ userId })
         } catch (err) {
-            console.log({ err })
             throw err
         }
     }

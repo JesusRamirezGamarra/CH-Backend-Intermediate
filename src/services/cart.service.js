@@ -1,14 +1,6 @@
-//----------* IMPORTS *----------//
-// import CartModel from '../Models/cart-model.js'
-// import { cartDao } from '../Daos/carts/index.js'
-// import { productsDao } from '../Daos/products/index.js'
-//import orderModel from '../models/order/order.model.js'
 import cartModel from '../models/cart/cart.model.js'
-// import cartNewUserModel from '../models/cart/cart-newuser.model.js'
-// import { orderDao } from '../daos/order/index.js'
 import { cartDao } from '../daos/cart/index.js'
 import { productDao } from '../daos/product/index.js'
-
 import config, {hasJsonResult} from '../config/config.js'
 
 
@@ -19,22 +11,14 @@ class CartService {
     #productDao
     constructor(cartModel, cartDao, productDao) {
         this.#cartModel = cartModel
-        // this.#cartNewUserModel = cartNewUserModel
-        // this.#orderDao = orderDao
         this.#cartDao = cartDao
         this.#productDao = productDao
     }
 
     addProducts = async (req) => {
         try {
-            // console.log(req.body)
-            // console.log(req.session.user)
             let cartId = req.session.user.cart
             let product = req.body;
-            // let cart = await this.#cartDao.getById(cartId);
-            // cart.products.push( {product: product[0]._id, quantity: 2} )
-            // cart.products.push( {product: product[1]._id, quantity: 1} )
-            // await this.#cartDao.addProduct(cartId,cart);
             await this.#cartDao.deleteAllProducts(cartId);
             await this.#cartDao.addProducts(cartId,product);
             const cart = await this.#cartDao.getByIdPopulate(cartId);
@@ -88,8 +72,6 @@ class CartService {
             await this.#cartDao.deleteAllProducts(cartId);
             await this.#cartDao.addProducts(cartId,product);
             const cart = await this.#cartDao.getByIdPopulate(cartId);
-            // console.log(JSON.stringify( cart,null,'\t'))
-            // console.log(cart.products[0].product.sku)
             if (!cart)
             return {
                 status: 404,
@@ -102,8 +84,6 @@ class CartService {
 
             let total = 0;
             cart.products.forEach( (item)=> total+= ( item.quantity * item.product.price) );
-            // await this.#orderDao.create(cart, req.session.user)
-
             return {
                 status: 200,
                 result:hasJsonResult.SUCCESS,

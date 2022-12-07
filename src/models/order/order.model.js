@@ -56,7 +56,6 @@ export default class OrderModel {
         this.#date = date
     }
     set userId(userId) {
-        console.log({ userId })
         if (!userId)
         throw {
             message: 'The client ID in the order is required.',

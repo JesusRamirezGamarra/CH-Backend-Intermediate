@@ -2,8 +2,6 @@ import config from '../../../config/config.js'
 import { ___dirname }  from '../../../utils/directory/root.directory.js'
 
 export const newUserEmailTemplate = (user_data) => {
-// console.log(___dirname)
-
 
     const mailOptions = {
     from: `${config.CONTACT_EMAIL.ADMIN.ALIAS} <${config.CONTACT_EMAIL.ADMIN.EMAIL}>`,

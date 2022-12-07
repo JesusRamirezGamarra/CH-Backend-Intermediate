@@ -13,34 +13,6 @@ searchForm.addEventListener('submit',(e)=>{
     e.preventDefault();
     if(document.forms.searchForm.q.value.trim())
         window.location.replace('/api/product/search/'+ document.forms.searchForm.q.value.trim());
-    // const term = document.forms.searchForm.q.value.trim()
-    // if (term){
-    //     const data = new FormData(searchForm);
-    //     // const obj = {}
-    //     // data.forEach((value,key)=>obj[key]=value);
-    //     // fetch('/api/session/login',{
-    //     let formData = new FormData(searchForm);
-    //     let obj = {};
-    //     formData.forEach((value,key)=>obj[key]=value);
-    //     fetch('/api/product/search/' + term,{
-    //         method:"GET",
-    //         // body:JSON.stringify(obj),
-    //         headers:{
-    //             "Content-Type":"application/json"
-    //         }
-    //     })
-    //     .then(result=>result.json()).then(json=>{
-    //         console.log(json);
-    //         // form.reset()
-    //         // if(json.result==="success"){
-    //         //     window.location.replace('/');
-    //         //     // window.location.replace('/datos');
-    //         // }       
-    //         // else if(json.result=="error"){
-    //         //     document.getElementById("idMessage").innerHTML = `${json.message} : ${json.payload.data.map( data => data.message)} `;            
-    //         // } 
-    //     });
-    // }        
 })
 showCart = () => document.getElementById("products-id").style.display = "block";
 closeBtn = () => document.getElementById("products-id").style.display = "none";
@@ -149,15 +121,12 @@ const handleCheckOutSubmit = (evt,form,route) =>{
             window.location.replace('/api/cart/checkout');
         }
         else if(json.result=="error"){
-            console.log("error");
         }
     })
     .catch((res) => {
-        console.log("catch",res);
         window.location.replace('/login');
     })
     .finally(() =>{
-        console.log("finally");
     })
 };
 checkOut.addEventListener('submit',(e)=>handleCheckOutSubmit(e,e.target,'/api/cart/'))

@@ -1,6 +1,8 @@
 import cartService from '../services/cart.service.js'
 import orderService from '../services/order.service.js';
 import config, {hasJsonResult} from '../config/config.js'
+import moment from 'moment';
+import { logger } from '../utils/logger/isLogger.js';
 
 class CartController {
     #cartService
@@ -24,6 +26,7 @@ class CartController {
             res.status(201).render('checkout',{ products : cart  , user: req.session.user }) ;
             //res.status(201).json(cart)
         } catch (err) {
+            logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
             res.status(err.status).json(err)
         }
     }
@@ -32,6 +35,7 @@ class CartController {
             const updatedProduct = await this.#cartService.addProducts(req)
             res.status(201).send(updatedProduct)
         } catch (err) {
+            logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
             res.status(err.status).json(err.err)
         }
     }
@@ -47,6 +51,7 @@ class CartController {
 
             res.status(201).send(updatedOrder)
         } catch (err) {
+            logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
             res.status(err.status).json(err.err)
         }
     } 
@@ -68,6 +73,7 @@ class CartController {
             //res.status(204).json()
 
         } catch (err) {
+            logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
             res.status(err.status).json(err)
         }
     }

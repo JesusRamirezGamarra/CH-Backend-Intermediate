@@ -14,9 +14,6 @@ export const  makeAyncEncryptPass = async (password) => {
     const salts = await bcrypt.genSalt(10);
     return bcrypt.hash(password,salts);    
 };
-// await
 export const isAyncValidPassword = async (password, hash) =>  bcrypt.compare(password, hash);
-
-
 export default makeEncryptPass
 

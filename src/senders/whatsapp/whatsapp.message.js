@@ -23,17 +23,6 @@ ${item.product.thumbnail}`
         const totalinfo =`
 *Order Id : ${order._id}*
 Total: ${total}`
-
-//         const messageInfoAccount = `_Detalles de la orden ${order._id}_
-// <p style="margin: 0px;"><b>Nombre:</b> ${fullName}</p>
-// <p style="margin: 0px;"><b>Correo:</b> ${order.user.email}</p>
-// <p style="margin: 0px;"><b>Teléfono:</b> ${order.user.phone_number}</p>
-// <p style="margin: 0px;"><b>Total:</b> ${total}</p>
-// <p style="margin: 0px;"><b>Productos:</b></p>
-// <ol>
-//     ${products}
-// </ol>`        
-        
         let fromMessage ='whatsapp:'+config.MESSAGE.WHATSAPP.PHONE_NUMBER.trimEnd() ;
         let toMessage= 'whatsapp:'+toNumber.trimEnd();
 
@@ -43,21 +32,6 @@ Total: ${total}`
             body:tituloinfo + totalinfo+ productsinfo,
             mediaUrl:['https://jesusramirez.pythonanywhere.com/static/img/Logo.jpg']
         })
-        // console.log(result)
-
-        // result = await client.messages.create({
-        //     from:fromMessage,
-        //     to:toMessage,
-        //     body: messageInfoAccount
-        // })
-        // console.log(result)
-
-
-
-
-        
-
-
     }
     catch(err)
     {

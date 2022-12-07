@@ -5,12 +5,11 @@ const client = twilio(config.MESSAGE.SMS.ACCOUNT_SID,config.MESSAGE.SMS.AUTH_TOK
 export const transporterSMS = async(toNumber,message) =>{
     try
     {
-        let result = await client.messages.create({
+        await client.messages.create({
                 from:   config.MESSAGE.SMS.PHONE_NUMBER,
                 to:     toNumber,
                 body:   message
             })
-        console.log(result);
     }
     catch(err)
     {

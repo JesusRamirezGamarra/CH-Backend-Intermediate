@@ -1,4 +1,6 @@
 import serverInfo from '../config/server.info.js'
+import moment from 'moment';
+import { logger } from '../utils/logger/isLogger.js';
 
 
 class InfoController {
@@ -7,8 +9,9 @@ class InfoController {
     serverInfo = async (req, res) => {
         try {
             res.render('server_info', { layout: 'server', data: serverInfo })
-        } catch (error) {
-            res.status(500).json(error)
+        } catch (err) {
+            logger.error(`${new moment().format('DD/MM/YYYY HH:mm:ss')} || PATH: ${req.path} || METHOD: ${req.method} || ERROR: ${err.message}`);
+            res.status(500).json(err)
         }
     }
 }

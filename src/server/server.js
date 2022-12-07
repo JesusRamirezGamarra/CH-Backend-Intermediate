@@ -40,7 +40,7 @@ import userRouter from '../routes/user.router.js';
 import productRouter from '../routes/product.router.js';
 import cartRouter from "../routes/cart.router.js";
 import orderRouter from "../routes/order.router.js";
-
+import Dao from '../daos/index.js';
 
 // import sessionRouter from '../routes/session.router.js';
 
@@ -64,9 +64,7 @@ import orderRouter from "../routes/order.router.js";
 // // // import orderRouter from './Routes/order-router.js'
 
 
-import Dao from '../daos/index.js';
 
-console.log(___dirname);
 
 export default class Server{
     constructor() {
@@ -165,9 +163,8 @@ export default class Server{
 
         this.app.all('*', (req, res) => {
             try{
-                let fyh = new moment().format('DD/MM/YYYY HH:mm:ss')
                 let url =  req.protocol + '://' + req.get('host') + req.originalUrl;
-                logger.warn(`${fyh}  || PATH: ${req.path} || Mehotd: ${req.method} || status: Page Not Fount || URL: ${url }`)
+                logger.warn(`${new moment().format('DD/MM/YYYY HH:mm:ss')}  || PATH: ${req.path} || Mehotd: ${req.method} || status: Page Not Fount || URL: ${url }`)
                 res.status(404).render("404");
             }
             catch(err){
@@ -177,9 +174,6 @@ export default class Server{
     }
 
     engines() {
-        // const layoutDirPath   = ___dirname + "\\views\\layouts";
-        // const defaultLayerPth = ___dirname + "\\views\\layouts\\main.hbs";
-        // const partialDirPath  = ___dirname + "\\views\\partials";
         const layoutDirPath   = ___dirname + "/views/layouts";
         const defaultLayerPth = ___dirname + "/views/layouts/main.hbs";
         const partialDirPath  = ___dirname + "/views/partials";        
