@@ -4,9 +4,7 @@ import jwt from 'jsonwebtoken'
 
 const isLoggedIn = (req, res, next) => {
     try{
-        if(!req.session.user) { 
-            return res.status(307).redirect('/login');
-        }
+        if(!req.session.user) return res.status(307).redirect('/login');
         next();
     }
     catch(err){
